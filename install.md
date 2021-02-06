@@ -70,6 +70,12 @@ http://localhost/wordpress/wp-login.php
 
 wordpress:password
 
+Not sure if this is already packaged as a Wordpress plugin (it isn't listed on Wordpress site, I've no idea how to tell otherwise...), so for now just pointing to it from web server root -
+
+cd /opt/lampp/htdocs
+sudo ln -s ~/sparqlpress/sparqlpress2 sparqlpress
+
+
 
 
 
