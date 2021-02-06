@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<foaf:Document rdf:about="">
+  <dcterms:created>2008-02-14</dcterms:created>
+  <dcterms:modified>2008-02-20</dcterms:modified>
+  <foaf:topic rdf:resource="http://xmlns.com/foaf/0.1/holdsAccount"/>
+  <foaf:topic rdf:resource="http://xmlns.com/foaf/0.1/accountProfilePage"/>
+  <foaf:topic rdf:resource="http://gmpg.org/xfn/11#me"/>
+  <rdfs:seeAlso rdf:resource="http://xmlns.com/foaf/0.1/"/>
+</foaf:Document>
+
+<rdf:Description rdf:about="http://xmlns.com/foaf/0.1/holdsAccount">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://xmlns.com/foaf/0.1/accountProfilePage">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://gmpg.org/xfn/11#me">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+</rdf:Description>
+
+</rdf:RDF>
