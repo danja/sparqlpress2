@@ -77,13 +77,30 @@ composer require semsol/arc2:^2
 
 (Ignored : Warning from https://repo.packagist.org: You are using an outdated version of Composer. Composer 2.0 is now available and you should upgrade. See https://getcomposer.org/2)
 
-(5. Install MariaDB client
+5. Install MariaDB client
+
+*not really necessary, can use :*
+http://localhost/phpmyadmin/
+
 ```
-sudo apt install mariadb-client-core-10.3)
+sudo apt install mariadb-client-core-10.3
 ```
+
+6. Install plugin
 
 http://localhost/wordpress/wp-login.php
 
-wordpress:password
+```
+user: wordpress
+pass: password
+```
 
-http://localhost/phpmyadmin/
+Recursively zip SparqlPress dir:
+
+./[zip.sh](zip.sh)
+
+http://localhost/wordpress/wp-admin/plugin-install.php
+
+Upload file.
+
+(Looks like any existing old version should be removed first)

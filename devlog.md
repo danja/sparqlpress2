@@ -21,14 +21,22 @@ https://wordpress.org/support/article/debugging-in-wordpress/
 
 **Ooh, useful!!**
 
-To have a look around I did :
 ```
-cd /opt/lampp/htdocs
-sudo ln -s ~/sparqlpress/sparqlpress2 sparqlpress
+Warning: include_once(arc/ARC2.php): Failed to open stream: No such file or directory in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/sparqlpress.php on line 36
+```
+Line 36:
+```
+include_once('arc/ARC2.php');
 ```
 
-http://localhost/phpmyadmin/
+ok, arc2 install moved, next error:
+```
+Fatal error: Array and string offset access syntax with curly braces is no longer supported in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/pear/JSON.php on line 156
+```
 
+Hmm. pear is/was the packaging thing, no? (pre-composer). Looks like updates needed around there...
+
+----
 
 **2021-02-06** Just started. Set up this repo.
 
@@ -37,3 +45,9 @@ Rather than attempting to get the previous version working with the 2010 setup, 
 Docs for the original version are minimal, so I guess I'll start by fumbling around...
 
 I'd already got the [Atom IDE](https://atom.io/) installed, so have added ide-php package.
+
+To have a look around I did :
+```
+cd /opt/lampp/htdocs
+sudo ln -s ~/sparqlpress/sparqlpress2 sparqlpress
+```
