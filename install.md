@@ -1,32 +1,45 @@
-1. Download & install XAMPP 
+1. Download & install XAMPP
 
 https://www.apachefriends.org/
+
+```
 sudo ./xampp-linux-x64-8.0.1-1-installer.run
+```
 
 Checkboxes : Select Components : all
-Checkbox : Launch XAMMP 
+
+Checkbox : Launch XAMMP
+
 Manage servers -
+
 Apache should already be running
+
 start MySQL (MySQL actually is MariaDB)
 
 Open browser at http://localhost/
-should redirect to - 
+
+should redirect to -
 http://localhost/dashboard/ - 'Welcome to XAMPP'
 
 (default web server root : /opt/lampp/htdocs/)
 
-2. Download & install Wordpress 
+2. Download & install Wordpress
 
 https://bitnami.com/stack/xampp#wordpress
+
+```
 sudo chmod +x bitnami-wordpress-5.6.1-0-module-linux-x64-installer.run
 sudo ./bitnami-wordpress-5.6.1-0-module-linux-x64-installer.run
+```
 
 Choose folder : default of /opt/lampp should be the same as XAMPP
 
 Admin account...
 
+```
 user: wordpress
 password: password
+```
 
 Configure SMTP - skip
 
@@ -38,6 +51,7 @@ Uncheck!
 Launch - checked
 
 Open:
+
 http://localhost/wordpress/
 
 should be 'Hello World!'
@@ -45,9 +59,9 @@ should be 'Hello World!'
 (WordPress web root is /opt/lampp/apps/wordpress/htdocs)
 
 3. Install Composer (PHP dependency manager)
-
+```
 sudo apt install composer
-
+```
 (or see https://getcomposer.org/download/)
 
 
@@ -55,27 +69,21 @@ sudo apt install composer
 
 https://github.com/semsol/arc2
 
+```
 mkdir arc2
 cd arc2
 composer require semsol/arc2:^2
-
+```
 
 (Ignored : Warning from https://repo.packagist.org: You are using an outdated version of Composer. Composer 2.0 is now available and you should upgrade. See https://getcomposer.org/2)
 
 (5. Install MariaDB client
-
+```
 sudo apt install mariadb-client-core-10.3)
+```
 
 http://localhost/wordpress/wp-login.php
 
 wordpress:password
 
-Not sure if this is already packaged as a Wordpress plugin (it isn't listed on Wordpress site, I've no idea how to tell otherwise...), so for now just pointing to it from web server root -
-
-cd /opt/lampp/htdocs
-sudo ln -s ~/sparqlpress/sparqlpress2 sparqlpress
-
-
-
-
-
+http://localhost/phpmyadmin/
