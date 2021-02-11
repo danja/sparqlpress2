@@ -4,6 +4,10 @@
 
 9:45
 
+```
+Fatal error: Array and string offset access syntax with curly braces is no longer supported in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/pear/JSON.php on line 156
+```
+
 pear install Services_JSON
 
 Notice: Trying to access array offset on value of type bool in PEAR/REST.php on line 187
@@ -13,9 +17,28 @@ mkdir -p /tmp/pear/cache
 
 pear install Services_JSON
 
-that appeared to work, but JSON.php wasn't visible. It was the only file in the pear dir so I downloaded the latest version :
+that appeared to work, but JSON.php wasn't visible. It was the only file in the pear dir so I downloaded what appeared to be the latest version, manually placed at pear/JSON.php :
 
-https://pear.php.net/pepr/pepr-proposal-show.php?id=198
+https://pear.php.net/package/Services_JSON/download
+
+Still get same error, so went through JSON.php and changed all the eg. a${1} to a$[1].
+
+Plugin now gets further, but now get two series of errors of the forms:
+
+```
+Deprecated: register_sidebar_widget is deprecated since version 2.8.0! Use wp_register_sidebar_widget() instead. in /opt/lampp/apps/wordpress/htdocs/wp-includes/functions.php on line 4859
+...
+Warning: Undefined array key "endpoint" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/endpoint.php on line 13
+```
+
+So...
+
+```
+~/sparqlpress$ grep -r register_sidebar_widget
+```
+
+Oh, cool, Atom IDE does search/replace in folders.
+
 
 
 

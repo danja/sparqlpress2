@@ -6,7 +6,7 @@ Revision: tag:morten@mfd-consult.dk,2010-02-19:13:15:36-y5cxg4ndacyey7n2
 function widget_sparqlpress_foafnaut_html_init() {
 
   // Check for the required API functions
-  if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
+  if ( !function_exists('wp_register_sidebar_widget') || !function_exists('wp_register_widget_control') )
     return;
 
   // This saves options and prints the widget's config form.
@@ -172,8 +172,8 @@ WHERE { ?s ?sifp ?sid ; ?ptype ?o .
   
   // This registers the widget
   function widget_sparqlpress_foafnaut_html_register() {
-    register_sidebar_widget('FOAFNaut', 'widget_sparqlpress_foafnaut_html');
-    register_widget_control('FOAFNaut', 'widget_sparqlpress_foafnaut_html_control', 460, 615);
+    wp_register_sidebar_widget('FOAFNaut', 'widget_sparqlpress_foafnaut_html');
+    wp_register_widget_control('FOAFNaut', 'widget_sparqlpress_foafnaut_html_control', 460, 615);
     add_filter('sparqlpress_foafnaut_queries', 'sparqlpress_foafnaut_queries');
     if (is_active_widget('widget_sparqlpress_foafnaut_html'))
       add_action('wp_head', 'widget_sparqlpress_foafnaut_html_header');

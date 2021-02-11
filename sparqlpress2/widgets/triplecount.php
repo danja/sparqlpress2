@@ -6,7 +6,7 @@ Revision: tag:morten@mfd-consult.dk,2010-02-19:13:15:36-y5cxg4ndacyey7n2
 function widget_sparqlpress_triplecount_init() {
 
   // Check for the required API functions
-  if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
+  if ( !function_exists('wp_register_sidebar_widget') || !function_exists('wp_register_widget_control') )
     return;
 
   // This saves options and prints the widget's config form.
@@ -83,8 +83,8 @@ function widget_sparqlpress_triplecount_init() {
 
   // This registers the widget
   function widget_sparqlpress_triplecount_register() {
-    register_sidebar_widget('TripleCount', 'widget_sparqlpress_triplecount');
-    register_widget_control('TripleCount', 'widget_sparqlpress_triplecount_control', 300, 95);
+    wp_register_sidebar_widget('TripleCount', 'widget_sparqlpress_triplecount');
+    wp_register_widget_control('TripleCount', 'widget_sparqlpress_triplecount_control', 300, 95);
     if (is_active_widget('widget_sparqlpress_triplecount'))
     	add_action('wp_head', 'widget_sparqlpress_triplecount_header');
   }
