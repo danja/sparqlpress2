@@ -1,5 +1,26 @@
 # SparqlPress2 Development log.
 
+**2021-02-11**
+
+9:45
+
+pear install Services_JSON
+
+Notice: Trying to access array offset on value of type bool in PEAR/REST.php on line 187
+PHP Notice:  Trying to access array offset on value of type bool in /usr/share/php/PEAR/REST.php on line 187
+
+mkdir -p /tmp/pear/cache
+
+pear install Services_JSON
+
+that appeared to work, but JSON.php wasn't visible. It was the only file in the pear dir so I downloaded the latest version :
+
+https://pear.php.net/pepr/pepr-proposal-show.php?id=198
+
+
+
+
+
 **2021-02-07**
 
 Wordpress does recognise a zip of the SparqlPress files as a plugin. When trying to install, it gives a critical error.
