@@ -2,7 +2,7 @@
 
 **2021-02-11**
 
-9:45
+Starting with:
 
 ```
 Fatal error: Array and string offset access syntax with curly braces is no longer supported in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/pear/JSON.php on line 156
