@@ -105,10 +105,6 @@ Upload file.
 
 (Looks like any existing old version should be removed first)
 
-7. Start XAMPP
+## Start XAMPP
 
 sudo /opt/lampp/lampp start
-
-sudo apt install php-pear
-
-pear install Services_JSON

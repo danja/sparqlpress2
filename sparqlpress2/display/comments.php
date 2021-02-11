@@ -9,7 +9,8 @@ function sparqlpress_display_comments_init() {
   global $sparqlpress;
   add_action('sparqlpress_option_page_form', 'sparqlpress_display_comments_option_page_form');
   add_action('sparqlpress_option_page_submit', 'sparqlpress_display_comments_option_page_submit');
-  if (!is_array($sparqlpress->options['display_comments']))
+  // if (!is_array($sparqlpress->options['display_comments']))
+  if (!array_key_exists('display_comments', $sparqlpress->options))
     $sparqlpress->options['display_comments'] = array(
         'show_links' => 't');
   if ($sparqlpress->options['display_comments']['show_links']
@@ -33,7 +34,7 @@ function sparqlpress_display_comments_init() {
   function sparqlpress_display_comments_option_page_submit() {
     global $sparqlpress;
     if (isset($_POST['sparqlpress_display_comments_action']) && is_array($sparqlpress->options['display_comments'])) {
-      foreach ($sparqlpress->options['display_comments'] as $k => $v) 
+      foreach ($sparqlpress->options['display_comments'] as $k => $v)
         $sparqlpress->options['display_comments'][$k] = $_POST['sparqlpress_display_comments_'.$k];
     }
   }
@@ -44,7 +45,7 @@ function sparqlpress_display_comments_init() {
     // Show links?
     if (!$sparqlpress->options['display_comments']['show_links'])
       return $html;
-    
+
     // Comment author must be registered user.
     if (!$comment->user_id)
       return $html;
@@ -90,12 +91,12 @@ LIMIT 1';
         $html = ' <a href="' . htmlspecialchars($row['homepage']) . '" title="Homepage"><img src="' . $sparqlpress->location . 'files/home.png' . '" width="16" height="16" alt="Home" /></a> ' . $html;
       if (!empty($row['weblog']))
         $html = ' <a href="' . htmlspecialchars($row['weblog']) . '" title="Weblog"><img src="' . $sparqlpress->location . 'files/blog.png' . '" width="16" height="16" alt="Weblog" /></a> ' . $html;
-    
+
       // Get account information, if present
       $query = '
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT DISTINCT ?account ?service ?accountname ?profile
-WHERE { 
+WHERE {
   <' . $row['person'] . '> foaf:holdsAccount ?account .
   ?account foaf:accountServiceHomepage ?service .
   OPTIONAL { ?account foaf:accountName ?accountname }

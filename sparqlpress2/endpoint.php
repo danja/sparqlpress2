@@ -10,7 +10,9 @@ function sparqlpress_endpoint_init() {
   $sparqlpress->endpoint = false;
   add_action('sparqlpress_option_page_form', 'sparqlpress_endpoint_option_page_form', 3);
   add_action('sparqlpress_option_page_submit', 'sparqlpress_endpoint_option_page_submit', 3);
-  if (!is_array($sparqlpress->options['endpoint']))
+
+  // if (!is_array($sparqlpress->options['endpoint']))
+  if (!array_key_exists('endpoint', $sparqlpress->options))
     $sparqlpress->options['endpoint'] = array(
         'endpoint_active' => 0,
         'endpoint_features' => array('select', 'ask', 'construct', 'describe'),

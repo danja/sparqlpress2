@@ -30,14 +30,14 @@ function widget_sparqlpress_foafnaut_html_init() {
     ?>
     <label for="widget_sparqlpress_foafnaut_html-title" style="line-height:35px;display:block;">Title</label>
     <input style="width: 450px;" id="widget_sparqlpress_foafnaut_html-title" name="widget_sparqlpress_foafnaut_html-title" type="text" value="<?php echo $title; ?>" />
-    <?php 
+    <?php
     if (sizeof($queries = apply_filters('sparqlpress_foafnaut_queries', array()))) {
       print '
 <label for="widget_sparqlpress_foafnaut_html_queries" style="line-height:35px;display:block;">Predefined queries:</label>
 <select id="widget_sparqlpress_foafnaut_html_queries" onChange="' . "
 document.getElementById('widget_sparqlpress_foafnaut_html-query_first').value =
 document.getElementById('widget_sparqlpress_foafnaut_html_queries_first_' + (document.getElementById('widget_sparqlpress_foafnaut_html_queries').options[selectedIndex].title)).title ;
-document.getElementById('widget_sparqlpress_foafnaut_html-query_next').value = 
+document.getElementById('widget_sparqlpress_foafnaut_html-query_next').value =
 document.getElementById('widget_sparqlpress_foafnaut_html_queries_next_' + (document.getElementById('widget_sparqlpress_foafnaut_html_queries').options[selectedIndex].title)).title ;
 " . '">
 <option title="q">Select...</option>';
@@ -144,7 +144,7 @@ if (typeof window.onload!="function") {
 
   function sparqlpress_foafnaut_queries($queries) {
     $queries[] = array(
-        'title' => 'Friends & Contacts', 
+        'title' => 'Friends & Contacts',
         'first' => '
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT ?slabel ?stype ?sid ?slink
@@ -154,7 +154,7 @@ WHERE { ?s ?p <' . get_option('siteurl') . '/> .
         OPTIONAL { ?s a ?stype } .
         OPTIONAL { ?s foaf:homepage ?slink } .
         OPTIONAL { ?s foaf:weblog ?slink } .
-      } LIMIT 1', 
+      } LIMIT 1',
         'next' => '
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT DISTINCT ?ptype ?o ?olabel ?otype ?oid ?olink
@@ -169,11 +169,11 @@ WHERE { ?s ?sifp ?sid ; ?ptype ?o .
       } GROUP BY ?o ORDER BY ASC(?oid)');
     return $queries;
   }
-  
+
   // This registers the widget
   function widget_sparqlpress_foafnaut_html_register() {
-    wp_register_sidebar_widget('FOAFNaut', 'widget_sparqlpress_foafnaut_html');
-    wp_register_widget_control('FOAFNaut', 'widget_sparqlpress_foafnaut_html_control', 460, 615);
+    wp_register_sidebar_widget('FOAFNaut_sidebar_id', 'FOAFNaut', 'widget_sparqlpress_foafnaut_html');
+    wp_register_widget_control('FOAFNaut_sidebar_id', 'FOAFNaut', 'widget_sparqlpress_foafnaut_html_control', 460, 615);
     add_filter('sparqlpress_foafnaut_queries', 'sparqlpress_foafnaut_queries');
     if (is_active_widget('widget_sparqlpress_foafnaut_html'))
       add_action('wp_head', 'widget_sparqlpress_foafnaut_html_header');

@@ -39,9 +39,58 @@ So...
 
 Oh, cool, Atom IDE does search/replace in folders.
 
+Now bunch of errors of the form:
+```
+Fatal error: Uncaught ArgumentCountError: Too few arguments to function wp_register_sidebar_widget(), 2 passed in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/widgets/triplecount.php on line 86 and at least 3 expected...
+```
+modifying:
 
+```
+wp_register_sidebar_widget('TripleCount', 'widget_sparqlpress_triplecount');
+->
+wp_register_sidebar_widget('TripleCount_sidebar_id', 'TripleCount', 'widget_sparqlpress_triplecount');
+```
+assuming the same ID needs to be used eg. wp_register_sidebar_widget & wp_register_widget_control
 
+```
+wp_register_sidebar_widget('FOAFNaut_sidebar_id', 'FOAFNaut', 'widget_sparqlpress_foafnaut_html');
+wp_register_widget_control('FOAFNaut_sidebar_id', 'FOAFNaut', 'widget_sparqlpress_foafnaut_html_control', 460, 615);
+```
 
+Now  :
+```
+Warning: Undefined array key "endpoint" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/endpoint.php on line 13
+
+Warning: Undefined array key "scutter" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/scutter.php on line 11
+
+Warning: Undefined array key "display_comments" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/display/comments.php on line 12
+
+Warning: Undefined array key "debug" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/debug.php on line 13
+```
+
+```
+// if (!is_array($sparqlpress->options['endpoint']))
+if (!array_key_exists('endpoint', $sparqlpress->options))
+
+// if (!is_array($sparqlpress->options['scutter']))
+if (!array_key_exists('scutter', $sparqlpress->options))
+
+// if (!is_array($sparqlpress->options['display_comments']))
+if (!array_key_exists('display_comments', $sparqlpress->options))
+
+//  if (!is_array($sparqlpress->options['debug']))
+if (!array_key_exists('debug', $sparqlpress->options))  
+```
+
+Ok, that all appears to have worked.
+
+Now the plugin is getting to 'Start Using SparqlPress'.
+
+Now getting:
+```
+Fatal error: Uncaught Error: Class "ARC2\Store\Adapter\AbstractAdapter" not found in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/src/ARC2/Store/Adapter/mysqliAdapter.php:17
+...
+```
 
 
 **2021-02-07**

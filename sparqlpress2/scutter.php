@@ -8,7 +8,8 @@ add_action('sparqlpress_init', 'sparqlpress_scutter_init');
 function sparqlpress_scutter_init() {
   global $sparqlpress, $wpdb;
   $sparqlpress->scutter = false;
-  if (!is_array($sparqlpress->options['scutter']))
+  // if (!is_array($sparqlpress->options['scutter']))
+  if (!array_key_exists('scutter', $sparqlpress->options))
     $sparqlpress->options['scutter'] = array(
         'scutter_active' => 0,
         'scutter_ifps' => array(),
@@ -294,7 +295,7 @@ SELECT ?URL ?DateTime ?Status ?ContentType ?Error WHERE {
 PREFIX scutter: <' . $sparqlpress->scutter->ns() . '>
 PREFIX dct: <http://purl.org/dc/terms/>
 SELECT ?URL ?DateTime ?Status ?ContentType ?RawTripleCount ?Error
-WHERE { 
+WHERE {
   ?r scutter:source ?URL ; scutter:latestFetch ?f .
   ?f dct:date ?DateTime ; scutter:status ?Status ; scutter:rawTripleCount ?RawTripleCount .
   OPTIONAL { ?f scutter:contentType ?ContentType }
@@ -318,9 +319,9 @@ PREFIX mysql: <http://web-semantics.org/ns/mysql/>
 PREFIX dct: <http://purl.org/dc/terms/>
 SELECT ?QueuedResource
 WHERE {
-  ?r scutter:source ?QueuedResource . 
-  OPTIONAL { ?r scutter:skip ?s } . 
-  OPTIONAL { ?r scutter:latestFetch ?f . ?f scutter:interval ?interval ; dct:date ?date } 
+  ?r scutter:source ?QueuedResource .
+  OPTIONAL { ?r scutter:skip ?s } .
+  OPTIONAL { ?r scutter:latestFetch ?f . ?f scutter:interval ?interval ; dct:date ?date }
   FILTER ( !BOUND(?s) && (!BOUND(?f) || (mysql:unix_timestamp(mysql:replace(mysql:replace(?date,"T",""),"Z","")) + ?interval < mysql:unix_timestamp("' . gmdate('Y-m-d H:i:s') . '") ) ) )
 } LIMIT 10');
     return $queries;
@@ -404,7 +405,7 @@ WHERE {
       $r = $sparqlpress->scutter->addGraph($row['url'], $graph, false);
     return $graph;
   }
-  
+
 }
 
 function sparqlpress_scutter_cron_schedules() {

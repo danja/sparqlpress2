@@ -83,8 +83,8 @@ function widget_sparqlpress_triplecount_init() {
 
   // This registers the widget
   function widget_sparqlpress_triplecount_register() {
-    wp_register_sidebar_widget('TripleCount', 'widget_sparqlpress_triplecount');
-    wp_register_widget_control('TripleCount', 'widget_sparqlpress_triplecount_control', 300, 95);
+    wp_register_sidebar_widget('TripleCount_sidebar_id', 'TripleCount', 'widget_sparqlpress_triplecount');
+    wp_register_widget_control('TripleCount_sidebar_id', 'TripleCount', 'widget_sparqlpress_triplecount_control', 300, 95);
     if (is_active_widget('widget_sparqlpress_triplecount'))
     	add_action('wp_head', 'widget_sparqlpress_triplecount_header');
   }
