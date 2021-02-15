@@ -1,6 +1,47 @@
 # SparqlPress2 Development log.
 
-**2021-02-15**
+**2021-02-15** [afternoon]
+
+ARC2 appears to have added/changed it's (PHP) namespace setup.
+
+Had to add
+```
+use MysqliDb;
+```
+to ```MysqliDbExtended```
+
+see https://www.php.net/manual/en/language.namespaces.importing.php
+
+Next :
+```
+PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'user'@'localhost' (using password: YES) in /home/danny/sparqlpress/sparqlpress2/arc/vendor/thingengineer/mysqli-database-class/MysqliDb.php on line 323
+```
+
+So added global permissions to ```user:secret``` with phpmyadmin.
+
+Still no joy...
+
+popped this into ```MysqliDb.php```:
+```
+foreach ($params as $pms) {
+  echo $pms . '<br>';
+}
+```
+which showed:
+```
+localhost
+user
+secret
+```
+
+```
+/opt/lampp/apps/wordpress/htdocs/wp-content/plugins$ sudo rm -r  sparqlpress
+```
+
+
+
+
+**2021-02-15** [morning]
 
 Fatal error: Uncaught Error: Class "ARC2\Store\Adapter\AbstractAdapter" not found in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/src/ARC2/Store/Adapter/mysqliAdapter.php:17
 

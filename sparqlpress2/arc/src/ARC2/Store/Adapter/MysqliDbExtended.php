@@ -1,11 +1,12 @@
 <?php
-
 namespace ARC2\Store\Adapter;
+
+use MysqliDb;
 
 /**
  * Extends MysqliDb class with some convient functions.
  */
-class MysqliDbExtended extends \MysqliDb
+class MysqliDbExtended extends MysqliDb
 {
     protected $last_result;
 
