@@ -1,15 +1,18 @@
 <?php
 
-include_once("path/to/arc/ARC2.php");
-
+include_once("/home/danny/sparqlpress/sparqlpress2/arc/ARC2.php");
+include_once("/home/danny/sparqlpress/sparqlpress2/arc/src/ARC2/Store/Adapter/AbstractAdapter.php");
+include_once("/home/danny/sparqlpress/sparqlpress2/arc/src/ARC2/Store/Adapter/MysqliDbExtended.php");
+include_once("/home/danny/sparqlpress/sparqlpress2/arc/src/ARC2/Store/Adapter/mysqliAdapter.php");
+include_once("/home/danny/sparqlpress/sparqlpress2/arc/vendor/thingenginner/msqli-database-class/MysqliDb.php);
 
 $config = array(
   /* db */
-  'db_name' => 'arc_db',
+  'db_name' => 'arc__test_db',
   'db_user' => 'user',
   'db_pwd' => 'secret',
   /* store */
-  'store_name' => 'sparqlpress',
+  'store_name' => 'sparqlpress_test',
   /* stop after 100 errors */
   'max_errors' => 100,
 );

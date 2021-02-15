@@ -65,7 +65,7 @@ sudo apt install composer
 (or see https://getcomposer.org/download/)
 
 
-4. Install ARC2
+4. Install ARC2 *(not necessary, SparqlPress includes)*
 
 https://github.com/semsol/arc2
 
@@ -108,3 +108,16 @@ Upload file.
 ## Start XAMPP
 
 sudo /opt/lampp/lampp start
+
+http://localhost/wordpress/wp-admin/admin.php?page=sparqlpress
+
+The SparqlPress store has not been configured or isn't working correctly.
+
+### Start Using SparqlPress!
+
+
+The necessary database tables for SparqlPress will be created.
+
+ Also set up a secure public SPARQL endpoint
+ Also set up scutter for automatic updates and linking
+ Also activate debugging

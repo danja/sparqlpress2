@@ -1,5 +1,73 @@
 # SparqlPress2 Development log.
 
+**2021-02-15**
+
+Fatal error: Uncaught Error: Class "ARC2\Store\Adapter\AbstractAdapter" not found in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/src/ARC2/Store/Adapter/mysqliAdapter.php:17
+
+added ```ide-html``` and ```atom-beautify``` to Atom to simplify testing
+
+```http://localhost/sparqlpress/play```
+
+->
+
+```/opt/lampp/htdocs/sparqlpress/play```
+
+->
+
+```~/sparqlpress/sparqlpress2/play/index.html```
+
+[[
+previously :
+```
+cd /opt/lampp/htdocs
+sudo ln -s ~/sparqlpress/sparqlpress2 sparqlpress
+```
+]]
+
+Grr, logging not working, tweaked
+
+```
+/opt/lampp/apps/wordpress/htdocs/wp-config.php
+
+@ini_set ('display_errors', 0);
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_LOG', '/home/danny/sparqlpress/wp-errors.log' );
+define( 'WP_DEBUG_DISPLAY', true );
+```
+
+```
+sudo /opt/lampp/lampp stop
+sudo /opt/lampp/lampp start
+```
+Ok, finally! found,
+
+```
+/opt/lampp/logs/php_error_log
+```
+
+note also XAMPP GUI -
+
+```
+sudo /opt/lampp/manager-linux-x64.run
+```
+
+The default method of ARC2 install now uses composer. To install manually (as in the plugin) have to add files & includes.
+
+trying ```http://localhost/sparqlpress/play/arctest.php```
+
+Created db & user using phpmyadmin
+
+CREATE USER 'user'@'%' IDENTIFIED VIA mysql_native_password USING '***';GRANT USAGE ON *.* TO 'user'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `arc_test_db`.* TO 'user'@'%';
+
+opening ```http://localhost/sparqlpress/play/arctest.php```
+ getting :
+```
+PHP Parse error:  syntax error, unexpected string content "", expecting "-" or identifier or variable or number in /home/danny/sparqlpress/sparqlpress2/play/arctest.php on line 42
+```
+
+
+
 **2021-02-11**
 
 Starting with:
