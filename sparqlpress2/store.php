@@ -55,6 +55,7 @@ function sparqlpress_store_init() {
   }
 
   function sparqlpress_store_option_page_submit() {
+    print_r($_POST); /// DANNY
     global $sparqlpress;
     if ($_POST['sparqlpress_store']=='t' && !$sparqlpress->store->isSetUp())
       $sparqlpress->store->setUp();

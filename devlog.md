@@ -1,5 +1,128 @@
 # SparqlPress2 Development log.
 
+```
+sudo /opt/lampp/lampp start
+tail -f /opt/lampp/logs/php_error_log
+
+sudo rm -r /opt/lampp/apps/sparqlpress
+sudo rm -r /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1
+
+cd ~/sparqlpress
+./zip.sh
+```
+
+**2021-02-18**
+
+Oooh, unexpected - on fresh startup, reloading gave this - note line after warnings:
+
+
+```
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 61
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 63
+
+Warning: Undefined array key "sparqlpress_store_clear" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 65
+
+SparqlPress is now ready to go! You can check the status of SparqlPress on the SparqlPress Information Page.
+
+
+Fatal error: Uncaught Error: Class "ARC2_ScutterStorePlugin" not found in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/ARC2.php:354 Stack trace: #0 /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php(126): ARC2::getComponent('ScutterStorePlu...', Array) #1 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(287): sparqlpress_scutter_option_page_submit('') #2 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(311): WP_Hook->apply_filters(NULL, Array) #3 /opt/lampp/apps/wordpress/htdocs/wp-includes/plugin.php(484): WP_Hook->do_action(Array) #4 /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/sparqlpress.php(123): do_action('sparqlpress_opt...') #5 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(287): sparqlpress->option_page_handler('') #6 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(311): WP_Hook->apply_filters('', Array) #7 /opt/lampp/apps/wordpress/htdocs/wp-includes/plugin.php(484): WP_Hook->do_action(Array) #8 /opt/lampp/apps/wordpress/htdocs/wp-admin/admin.php(259): do_action('settings_page_s...') #9 /opt/lampp/apps/wordpress/htdocs/wp-admin/options-general.php(10): require_once('/opt/lampp/apps...') #10 {main} thrown in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/ARC2.php on line 354
+
+```
+
+Oh. But that takes me back to "The SparqlPress store has not been configured or isn't working correctly."
+
+A quick google later, found a blog post by Benjamin Nowack that mentioned ARC2 plugins (and the "This Week's Semantic Web" blog I used to do for Talis!).
+
+http://bnode.org/blog/2008/03/31/new-arc2-plugins
+
+took me to -
+
+https://web.archive.org/web/20110308145833/http://arc.semsol.org/download/plugins
+
+----
+
+Just occurred to me - 'set up scutter' is an checkbox on the initial SparqlPress page.
+Retrying without that checked...
+
+Progress!
+
+Page starts with:
+```
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 61
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 63
+
+Warning: Undefined array key "sparqlpress_store_clear" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 65
+
+Warning: Undefined array key "sparqlpress_scutter" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 123
+
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 131
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 133
+```
+
+![Screenshot](            Screenshot from 2021-02-18 22-44-04.png)
+
+I checked all SPARQL Write features.
+
+Took me back to the SparqlPress config pages, with the previous stuff preceded by:
+
+```
+Warning: Undefined array key "sparqlpress_store" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 59
+
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 61
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 63
+
+Warning: Undefined array key "sparqlpress_store_clear" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 65
+
+```
+**SparqlPress options were updated.**
+```
+Warning: Undefined array key "sparqlpress_endpoint" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/endpoint.php on line 80
+
+Warning: Undefined array key "sparqlpress_endpoint_timeout" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/endpoint.php on line 89
+
+Warning: Undefined array key "sparqlpress_scutter" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 123
+
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 131
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 133
+
+Warning: Undefined array key "sparqlpress_scutter_active" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 137
+
+Warning: Undefined array key "sparqlpress_scutter_ifps" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 137
+
+Warning: Undefined array key "sparqlpress_debug" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/debug.php on line 46
+```
+
+Checking with phpmyadmin, 6 new tables called wp_sparqlpress_* have been created. **Yay!**
+
+store.php line 58 added
+
+```
+print_r($_POST);
+```
+
+re-installed plugin,
+
+http://localhost/wordpress/wp-admin/options-general.php?page=sparqlpress.php
+
+produces this at top:
+
+```
+Array ( [_wpnonce] => 94e0a048d8 [_wp_http_referer] => /wordpress/wp-admin/options-general.php?page=sparqlpress.php [sparqlpress_action] => create [sparqlpress_store] => t [Submit] => Start using SparqlPress! [sparqlpress_endpoint] => t ) localhost:3306
+bn_wordpress
+```
+
+**So, looks like another load of bits to chip away at**
+
+note...
+array_key_exists($key, $table)
+
+
+
 **2021-02-15** [afternoon]
 
 ARC2 appears to have added/changed it's (PHP) namespace setup.
