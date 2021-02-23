@@ -10,7 +10,7 @@ Author URI: http://wiki.foaf-project.org/SparqlPress
 */
 
 class sparqlpress {
-  
+
   function sparqlpress() { $this->__construct(); }
   function __construct() {
   	global $wp;
@@ -36,7 +36,7 @@ class sparqlpress {
     include_once('arc/ARC2.php');
     if (!class_exists('Services_JSON'))
       include_once('pear/JSON.php');
-    
+
     // Data Generation, using WP info
     #  include_once('foaf/skos/sioc');
 
@@ -165,6 +165,12 @@ class sparqlpress {
 
   function info_page_handler() {
     global $sparqlpress;
+    // DANNY
+    // print('<br>$sparqlpress->store = <br>');
+    // print_r($sparqlpress->store);
+    print('<br>$sparqlpress->store->isSetUp()<br>');
+    print_r($sparqlpress->store->isSetUp());
+    print('<br>');
     if (!$sparqlpress->store || !$sparqlpress->store->isSetUp()) {
       print '<div id="message" class="updated fade"><p>The SparqlPress store has not been <a href="options-general.php?page=' . basename(__FILE__) . '">configured</a> or isn\'t working correctly.</p></div>';
       return;
@@ -224,7 +230,7 @@ document.getElementById('query').value=document.getElementById('queries').option
       </p>
       </div>';
   }
-  
+
   function sha1($iri, $die=true) {
     if (function_exists('sha1'))
       $sha1 = sha1($iri);

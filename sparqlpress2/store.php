@@ -19,7 +19,9 @@ function sparqlpress_store_init() {
     /* store */
     'store_name' => $wpdb->prefix . 'sparqlpress'
   );
+
   $sparqlpress->store = ARC2::getStore($config);
+
   if ($sparqlpress->store->isSetup())
     add_filter('sparqlpress_info_stats', 'sparqlpress_store_info_stats');
 
@@ -55,15 +57,14 @@ function sparqlpress_store_init() {
   }
 
   function sparqlpress_store_option_page_submit() {
-    print_r($_POST); /// DANNY
     global $sparqlpress;
-    if ($_POST['sparqlpress_store']=='t' && !$sparqlpress->store->isSetUp())
+    if (array_key_exists('sparqlpress_store', $_POST) && $_POST['sparqlpress_store']=='t' && !$sparqlpress->store->isSetUp())
       $sparqlpress->store->setUp();
-    if ($_POST['sparqlpress_store_reset']=='t' && $sparqlpress->store->isSetUp())
+    if (array_key_exists('sparqlpress_store_reset', $_POST) && $_POST['sparqlpress_store_reset']=='t' && $sparqlpress->store->isSetUp())
       $sparqlpress->store->reset();
-    if ($_POST['sparqlpress_store_delete']=='t' && $sparqlpress->store->isSetUp())
+    if (array_key_exists('sparqlpress_store_delete', $_POST) && $_POST['sparqlpress_store_delete']=='t' && $sparqlpress->store->isSetUp())
       $sparqlpress->store->drop();
-    if ($_POST['sparqlpress_store_clear']=='t') {
+    if (array_key_exists('sparqlpress_store_clear', $_POST) && $_POST['sparqlpress_store_clear']=='t') {
       $sparqlpress->options = array();
     }
   }

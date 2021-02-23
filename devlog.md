@@ -5,11 +5,50 @@ sudo /opt/lampp/lampp start
 tail -f /opt/lampp/logs/php_error_log
 
 sudo rm -r /opt/lampp/apps/sparqlpress
-sudo rm -r /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1
+sudo rm -r /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress*
 
 cd ~/sparqlpress
 ./zip.sh
 ```
+
+**2021-02-23 **
+```
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 64
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 66
+
+Warning: Undefined array key "sparqlpress_store_clear" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 68
+```
+
+in ```store.php, function sparqlpress_store_option_page_submit()``` :
+
+added existent checks -
+
+```
+if (array_key_exists('sparqlpress_store', $_POST) && $_POST['sparqlpress_store']=='t' && !$sparqlpress->store->isSetUp())
+  $sparqlpress->store->setUp();
+```
+
+ditto for:
+```
+
+Warning: Undefined array key "sparqlpress_scutter" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 123
+
+Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 131
+
+Warning: Undefined array key "sparqlpress_store_delete" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php on line 133
+
+Warning: Undefined array key "sparqlpress_debug" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/debug.php on line 46
+```
+
+```$sparqlpress->store->isSetup()``` is returning '0'
+
+store is created in ```store.php:23``` with :
+
+```$sparqlpress->store = ARC2::getStore($config);```
+
+
+
 
 **2021-02-18**
 

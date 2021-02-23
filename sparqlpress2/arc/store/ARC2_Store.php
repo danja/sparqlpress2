@@ -71,24 +71,32 @@ class ARC2_Store extends ARC2_Class
 
     public function createDBCon()
     {
+      print('<br>in ARC2_Store createDBCon()<br>'); // DANNY
         // build connection credential array
         foreach (['db_host' => 'localhost', 'db_user' => '', 'db_pwd' => '', 'db_name' => ''] as $k => $v) {
             $this->a[$k] = $this->v($k, $v, $this->a);
         }
 
+  print('<br>pre-connect<br>'); // DANNY
+
         // connect
         try {
             if (false === class_exists('\\ARC2\\Store\\Adapter\\AdapterFactory')) {
+                print('<br>false === class_exists<br>'); // DANNY
                 require __DIR__.'/../src/ARC2/Store/Adapter/AdapterFactory.php';
             }
             if (false == isset($this->a['db_adapter'])) {
+              print('<br>false == isset($this->a[db_adapter])<br>'); // DANNY
                 $this->a['db_adapter'] = 'mysqli';
             }
             $factory = new \ARC2\Store\Adapter\AdapterFactory();
             $this->db = $factory->getInstanceFor($this->a['db_adapter'], $this->a);
             $err = $this->db->connect();
             // stop here, if an error occoured
+            print('<br>$err = <br>'); // DANNY
+            print_r($err);
             if (is_string($err) && false !== empty($err)) {
+                  print('<br>is_string($err) && false !== empty($err)<br>'); // DANNY
                 throw new \Exception($err);
             }
         } catch (\Exception $e) {
@@ -291,6 +299,9 @@ class ARC2_Store extends ARC2_Class
 
     public function isSetUp()
     {
+      print('<br>ARC2_Store $this->db<br>');
+      print_r($this->db);
+      print('<br>'); // DANNY
         if (null !== $this->db) {
             $tbl = $this->getTablePrefix().'setting';
 
@@ -300,6 +311,9 @@ class ARC2_Store extends ARC2_Class
             } catch (\Exception $e) {
                 // when using PDO, an exception gets thrown if $tbl does not exist.
                 $this->errors[] = $e->getMessage();
+                print('<br>ARC2_Store $e->getMessage()<br>');
+                print_r($e->getMessage());
+                print('<br>'); // DANNY
                 return 0;
             }
         }

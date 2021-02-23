@@ -120,7 +120,7 @@ function sparqlpress_scutter_init() {
 
   function sparqlpress_scutter_option_page_submit() {
     global $sparqlpress, $wpdb;
-    if ($_POST['sparqlpress_scutter']=='t') {
+    if (array_key_exists('sparqlpress_scutter', $_POST) && $_POST['sparqlpress_scutter']=='t') {
       $sparqlpress->options['scutter']['scutter_active'] = 1;
       if (!$sparqlpress->scutter)
         $sparqlpress->scutter = ARC2::getComponent('ScutterStorePlugin', array_merge($sparqlpress->store->a, $sparqlpress->options['scutter'], array('store_name' => $wpdb->prefix . 'sparqlpress_scutter')));
@@ -128,9 +128,9 @@ function sparqlpress_scutter_init() {
         $sparqlpress->scutter->setUp();
       print '<div class="updated fade"><p>The scutter has been configured and initialised. In a few minutes, the first resources should automagically be fetched and stored for you to explore. Should you know of some relevant URLs that the scutter won\'t be able to find on its own, you can submit them manually on the <a href="admin.php?page=sparqlpress/scutter">SparqlPress Scutter page</a>.</p></div>';
     }
-    if ($_POST['sparqlpress_store_reset']=='t' && $sparqlpress->scutter->isSetUp())
+    if (array_key_exists('sparqlpress_store_reset', $_POST) && $_POST['sparqlpress_store_reset']=='t' && $sparqlpress->scutter->isSetUp())
       $sparqlpress->scutter->reset();
-    if ($_POST['sparqlpress_store_delete']=='t' && $sparqlpress->scutter->isSetUp())
+    if (array_key_exists('sparqlpress_store_delete', $_POST) && $_POST['sparqlpress_store_delete']=='t' && $sparqlpress->scutter->isSetUp())
       $sparqlpress->scutter->drop();
     if (isset($_POST['sparqlpress_scutter_action']) && is_array($sparqlpress->options['scutter'])) {
       foreach ($sparqlpress->options['scutter'] as $k => $v)

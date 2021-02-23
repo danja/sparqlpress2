@@ -11,7 +11,7 @@ function sparqlpress_debug_init() {
   add_action('sparqlpress_option_page_form', 'sparqlpress_debug_option_page_form', 11);
   add_action('sparqlpress_option_page_submit', 'sparqlpress_debug_option_page_submit', 11);
   //  if (!is_array($sparqlpress->options['debug']))
-  if (!array_key_exists('debug', $sparqlpress->options))  
+  if (!array_key_exists('debug', $sparqlpress->options))
     $sparqlpress->options['debug'] = array('debug_active' => 0);
   if ($sparqlpress->options['debug']['debug_active']) {
   	$sparqlpress->debug = true;
@@ -43,7 +43,7 @@ function sparqlpress_debug_init() {
 
   function sparqlpress_debug_option_page_submit() {
     global $sparqlpress;
-    if ($_POST['sparqlpress_debug']=='t')
+    if (array_key_exists('sparqlpress_debug', $_POST) && $_POST['sparqlpress_debug']=='t')
       $sparqlpress->options['debug']['debug_active'] = 1;
     if (isset($_POST['sparqlpress_debug_action']) && is_array($sparqlpress->options['debug'])) {
       foreach ($sparqlpress->options['debug'] as $k => $v)
