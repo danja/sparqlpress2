@@ -11,6 +11,28 @@ cd ~/sparqlpress
 ./zip.sh
 ```
 
+**2021-02-27**
+
+It's going in a loop on unconfigured.
+
+I thought it was a stupid DB connection problem until finding *errno = 0* is no error.
+
+
+There appear to be a load of callbacks getting addressed by WordPress via its:
+```
+apply_filters( string $tag, mixed $value )
+```
+
+Which, by asking for scutter to be turned on, includes
+
+http://bzr.mfd-consult.dk/scutter-store/
+
+```
+Fatal error: Uncaught Error: Class "ARC2_ScutterStorePlugin" not found in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/ARC2.php:356 Stack trace: #0 /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/scutter.php(126): ARC2::getComponent('ScutterStorePlu...', Array) #1 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(287): sparqlpress_scutter_option_page_submit('') #2 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(311): WP_Hook->apply_filters(NULL, Array) #3 /opt/lampp/apps/wordpress/htdocs/wp-includes/plugin.php(484): WP_Hook->do_action(Array) #4 /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/sparqlpress.php(123): do_action('sparqlpress_opt...') #5 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(287): sparqlpress->option_page_handler('') #6 /opt/lampp/apps/wordpress/htdocs/wp-includes/class-wp-hook.php(311): WP_Hook->apply_filters('', Array) #7 /opt/lampp/apps/wordpress/htdocs/wp-includes/plugin.php(484): WP_Hook->do_action(Array) #8 /opt/lampp/apps/wordpress/htdocs/wp-admin/admin.php(259): do_action('settings_page_s...') #9 /opt/lampp/apps/wordpress/htdocs/wp-admin/options-general.php(10): require_once('/opt/lampp/apps...') #10 {main} thrown in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/arc/ARC2.php on line 356
+```
+
+
+
 **2021-02-23 **
 ```
 Warning: Undefined array key "sparqlpress_store_reset" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress-1/store.php on line 64

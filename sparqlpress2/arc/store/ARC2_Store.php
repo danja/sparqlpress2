@@ -92,14 +92,20 @@ class ARC2_Store extends ARC2_Class
             $factory = new \ARC2\Store\Adapter\AdapterFactory();
             $this->db = $factory->getInstanceFor($this->a['db_adapter'], $this->a);
             $err = $this->db->connect();
+
             // stop here, if an error occoured
             print('<br>$err = <br>'); // DANNY
             print_r($err);
+            print('<br>$this->db = <br>'); // DANNY
+            print_r($this->db);
+
             if (is_string($err) && false !== empty($err)) {
                   print('<br>is_string($err) && false !== empty($err)<br>'); // DANNY
                 throw new \Exception($err);
             }
         } catch (\Exception $e) {
+            print('<br>in catch, $e<br>'); // DANNY
+          print_r($e);
             return $this->addError($e->getMessage());
         }
 
