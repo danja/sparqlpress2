@@ -11,6 +11,51 @@ cd ~/sparqlpress
 ./zip.sh
 ```
 
+**2021-03-03**
+
+PHP Warning:  PHP Startup: Unable to load dynamic library 'imagick.so'
+
+installed php-imagick
+
+*Hah!*
+
+Just saw something rather important in the ARC2 docs I'd missed before:
+
+```
+$store = ARC2::getStore($config);
+// since version 2.3+
+$store->createDBCon();
+$store->setup();
+```
+so added these to store.php :
+```
+$sparqlpress->store->createDBCon();
+$sparqlpress->store->setup();
+```
+
+
+
+**2021-03-02**
+
+(nothing worth documenting the past few days)
+
+at http://localhost/phpmyadmin/db_sql.php?db=bitnami_wordpress
+
+show variables like '%log_file%'
+
+| Variable_name             | Value                  |
+| ------------------------- | ---------------------- |
+| aria_log_file_size        | 1073741824             |
+| binlog_file_cache_size    | 16384                  |
+| general_log_file          | danny-desktop.log      |
+| innodb_log_file_size      | 5242880                |
+| innodb_log_files_in_group | 2                      |
+| slow_query_log_file       | danny-desktop-slow.log |
+
+hmm, no sign of danny-desktop.log...
+
+Warning: An unexpected error occurred. Something may be wrong with WordPress.org or this server’s configuration. If you continue to have problems, please try the support forums. (WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.) in /opt/lampp/apps/wordpress/htdocs/wp-includes/update.php on line 408
+
 **2021-02-27**
 
 It's going in a loop on unconfigured.

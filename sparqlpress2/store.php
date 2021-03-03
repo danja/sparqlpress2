@@ -22,6 +22,14 @@ function sparqlpress_store_init() {
 
   $sparqlpress->store = ARC2::getStore($config);
 
+// from https://github.com/semsol/arc2/wiki/Getting-started-with-ARC2
+// since version 2.3+
+// $store->createDBCon();
+// $store->setup();
+
+$sparqlpress->store->createDBCon();
+$sparqlpress->store->setup();
+
   if ($sparqlpress->store->isSetup())
     add_filter('sparqlpress_info_stats', 'sparqlpress_store_info_stats');
 

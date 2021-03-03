@@ -77,7 +77,8 @@ function sparqlpress_endpoint_init() {
 
   function sparqlpress_endpoint_option_page_submit() {
     global $sparqlpress;
-    if ($_POST['sparqlpress_endpoint']=='t') {
+
+    if (array_key_exists('sparqlpress_endpoint', $_POST) && $_POST['sparqlpress_endpoint']=='t') {
       $sparqlpress->options['endpoint']['endpoint_active'] = 1;
       if (!$sparqlpress->endpoint)
         $sparqlpress->endpoint = ARC2::getStoreEndpoint(array_merge($sparqlpress->store->a, $sparqlpress->options['endpoint']));

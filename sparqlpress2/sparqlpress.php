@@ -165,24 +165,22 @@ class sparqlpress {
 
   function info_page_handler() {
     global $sparqlpress;
-    // DANNY
-    // print('<br>$sparqlpress->store = <br>');
-    // print_r($sparqlpress->store);
-    print('<br>$sparqlpress->store->isSetUp() XXXXXX<br>');
-    print_r($sparqlpress->store->isSetUp());
-    print('<br><br><br><br>');
-    print('<br>$sparqlpress->store XXXXXX<br>');
-    print_r($sparqlpress->store);
+
+    if($sparqlpress->store->isSetUp()){ // DANNY
+      print('<b>TRUE<b>');
+    } else {
+      print('<b>FALSE<b>');
+    }
 
     if (!$sparqlpress->store || !$sparqlpress->store->isSetUp()) {
       print '<div id="message" class="updated fade"><p>The SparqlPress store has not been <a href="options-general.php?page=' . basename(__FILE__) . '">configured</a> or isn\'t working correctly.</p></div>';
-      // return; DANNY
+      return;
     }
     print '
       <div class="wrap sparqlpress">
         <h2>SparqlPress Information and Statistics</h2>';
     $stats = apply_filters('sparqlpress_info_stats', array());
-    print '<table><tr>STATS';  // DANNY STATS
+    print '<table><tr>';  // DANNY STATS
     foreach ($stats as $stat)
       print '<th>' . key($stat) . '</th>';
     print '</tr><tr>';
