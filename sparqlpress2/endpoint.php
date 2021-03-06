@@ -78,6 +78,9 @@ function sparqlpress_endpoint_init() {
   function sparqlpress_endpoint_option_page_submit() {
     global $sparqlpress;
 
+    // DANNY
+    print_r($_POST);
+    
     if (array_key_exists('sparqlpress_endpoint', $_POST) && $_POST['sparqlpress_endpoint']=='t') {
       $sparqlpress->options['endpoint']['endpoint_active'] = 1;
       if (!$sparqlpress->endpoint)
@@ -85,6 +88,7 @@ function sparqlpress_endpoint_init() {
       if (!$sparqlpress->endpoint->isSetUp())
         $sparqlpress->endpoint->setUp();
     }
+
     if (isset($_POST['sparqlpress_endpoint_action']) && is_array($sparqlpress->options['endpoint'])) {
       foreach ($sparqlpress->options['endpoint'] as $k => $v)
         $sparqlpress->options['endpoint'][$k] = $_POST['sparqlpress_'.$k];

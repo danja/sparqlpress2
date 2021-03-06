@@ -11,6 +11,20 @@ cd ~/sparqlpress
 ./zip.sh
 ```
 
+**2021-03-06**
+
+I am getting closer, piano, piano. ARC2 appears to be creating the triplestore in MySQL, but then not doing anything with it. Need to find the endpoint (SparqlPress gives 404).
+
+Googling for any obvious related changes to ARC2, https://rhiaro.co.uk/2014/05/arc2-sparql is quite funny. But not the issue here. I guess I need to RTFM a bit more on ARC2.
+
+Oh Benji I could scream.
+
+https://github.com/semsol/arc2/wiki/SPARQL-Endpoint-Setup
+
+All the info you need (in 2012) except where the endpoint will be.
+
+
+
 **2021-03-03**
 
 PHP Warning:  PHP Startup: Unable to load dynamic library 'imagick.so'
@@ -33,11 +47,9 @@ $sparqlpress->store->createDBCon();
 $sparqlpress->store->setup();
 ```
 
-
-
 **2021-03-02**
 
-(nothing worth documenting the past few days)
+(nothing worth documenting the past few days, spinning tyres)
 
 at http://localhost/phpmyadmin/db_sql.php?db=bitnami_wordpress
 

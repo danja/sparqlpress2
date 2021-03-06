@@ -71,22 +71,16 @@ class ARC2_Store extends ARC2_Class
 
     public function createDBCon()
     {
-      // print('<br>in ARC2_Store createDBCon()<br>'); // DANNY
-        // build connection credential array
         foreach (['db_host' => 'localhost', 'db_user' => '', 'db_pwd' => '', 'db_name' => ''] as $k => $v) {
             $this->a[$k] = $this->v($k, $v, $this->a);
         }
 
-  // print('<br>pre-connect<br>'); // DANNY
-
         // connect
         try {
             if (false === class_exists('\\ARC2\\Store\\Adapter\\AdapterFactory')) {
-              //  print('<br>false === class_exists<br>'); // DANNY
                 require __DIR__.'/../src/ARC2/Store/Adapter/AdapterFactory.php';
             }
             if (false == isset($this->a['db_adapter'])) {
-            //  print('<br>false == isset($this->a[db_adapter])<br>'); // DANNY
                 $this->a['db_adapter'] = 'mysqli';
             }
             $factory = new \ARC2\Store\Adapter\AdapterFactory();

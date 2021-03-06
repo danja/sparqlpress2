@@ -180,7 +180,7 @@ class sparqlpress {
       <div class="wrap sparqlpress">
         <h2>SparqlPress Information and Statistics</h2>';
     $stats = apply_filters('sparqlpress_info_stats', array());
-    print '<table><tr>';  // DANNY STATS
+    print '<table><tr>';
     foreach ($stats as $stat)
       print '<th>' . key($stat) . '</th>';
     print '</tr><tr>';
@@ -192,6 +192,11 @@ class sparqlpress {
 
   function queries_page_handler() {
     global $sparqlpress;
+    // DANNY
+    print('<br>$_POST<br>');
+    print_r($_POST);
+    print('<br>$_REQUEST<br>');
+    print_r($_QUERY);
     if (isset($_REQUEST['query'])) {
       print '
         <div class="wrap sparqlpress">

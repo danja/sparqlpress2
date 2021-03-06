@@ -350,8 +350,6 @@ class ARC2 {
       $name = $m[2];
     }
     $cls = $prefix . '_' . $name;
-    // print('<br>ARC2:353 $cls =  ' . $cls); // DANNY
-    // print_r($a); // DANNY
     if (!$caller) $caller = new stdClass();
     return new $cls($a, $caller);
   }
