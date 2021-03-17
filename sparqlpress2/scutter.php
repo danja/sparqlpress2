@@ -3,6 +3,9 @@
 Revision: tag:morten@mfd-consult.dk,2010-02-19:13:15:36-y5cxg4ndacyey7n2
 */
 
+// DANNY
+include 'ARC2_ScutterStorePlugin.php';
+
 add_action('sparqlpress_init', 'sparqlpress_scutter_init');
 
 function sparqlpress_scutter_init() {
@@ -119,7 +122,9 @@ function sparqlpress_scutter_init() {
   }
 
   function sparqlpress_scutter_option_page_submit() {
+
     global $sparqlpress, $wpdb;
+
     if (array_key_exists('sparqlpress_scutter', $_POST) && $_POST['sparqlpress_scutter']=='t') {
       $sparqlpress->options['scutter']['scutter_active'] = 1;
       if (!$sparqlpress->scutter)
@@ -128,17 +133,23 @@ function sparqlpress_scutter_init() {
         $sparqlpress->scutter->setUp();
       print '<div class="updated fade"><p>The scutter has been configured and initialised. In a few minutes, the first resources should automagically be fetched and stored for you to explore. Should you know of some relevant URLs that the scutter won\'t be able to find on its own, you can submit them manually on the <a href="admin.php?page=sparqlpress/scutter">SparqlPress Scutter page</a>.</p></div>';
     }
+
     if (array_key_exists('sparqlpress_store_reset', $_POST) && $_POST['sparqlpress_store_reset']=='t' && $sparqlpress->scutter->isSetUp())
       $sparqlpress->scutter->reset();
+
     if (array_key_exists('sparqlpress_store_delete', $_POST) && $_POST['sparqlpress_store_delete']=='t' && $sparqlpress->scutter->isSetUp())
       $sparqlpress->scutter->drop();
+
     if (isset($_POST['sparqlpress_scutter_action']) && is_array($sparqlpress->options['scutter'])) {
-      foreach ($sparqlpress->options['scutter'] as $k => $v)
-        $sparqlpress->options['scutter'][$k] = $_POST['sparqlpress_'.$k];
-      $sparqlpress->options['scutter']['scutter_cron_cycles_current'] = 1;
-      if (wp_next_scheduled('sparqlpress_scutter_cron_action_hook')) {
-        wp_clear_scheduled_hook('sparqlpress_scutter_cron_action_hook');
-        wp_schedule_event(time() + $sparqlpress->options['scutter']['scutter_cron_interval'], 'sparqlpress_scutter', 'sparqlpress_scutter_cron_action_hook');
+      foreach ($sparqlpress->options['scutter'] as $k => $v){
+        if(array_key_exists('sparqlpress_'.$k, $_POST)){ // DANNY
+          $sparqlpress->options['scutter'][$k] = $_POST['sparqlpress_'.$k];
+        }
+        $sparqlpress->options['scutter']['scutter_cron_cycles_current'] = 1;
+        if (wp_next_scheduled('sparqlpress_scutter_cron_action_hook')) {
+          wp_clear_scheduled_hook('sparqlpress_scutter_cron_action_hook');
+          wp_schedule_event(time() + $sparqlpress->options['scutter']['scutter_cron_interval'], 'sparqlpress_scutter', 'sparqlpress_scutter_cron_action_hook');
+        }
       }
     }
     if ($sparqlpress->scutter)

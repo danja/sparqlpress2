@@ -193,10 +193,10 @@ class sparqlpress {
   function queries_page_handler() {
     global $sparqlpress;
     // DANNY
-    print('<br>$_POST<br>');
-    print_r($_POST);
-    print('<br>$_REQUEST<br>');
-    print_r($_QUERY);
+    // print('<br>$_POST<br>');
+    // print_r($_POST);
+    // print('<br>$_REQUEST<br>');
+    // print_r($_QUERY);
     if (isset($_REQUEST['query'])) {
       print '
         <div class="wrap sparqlpress">
@@ -229,12 +229,14 @@ document.getElementById('query').value=document.getElementById('queries').option
       print '</select></div>';
     } else
       print '<p>No canned queries were found</p>';
+    if (array_key_exists('query', $_POST)){
     print '
       <textarea id="query" name="query" rows="15" cols="80">' . stripslashes($_POST['query']) . ' </textarea>
       <p class="submit">
         <input type="submit" name="Submit" value="' . __('Send Query') . '" />
       </p>
       </div>';
+    }
   }
 
   function sha1($iri, $die=true) {

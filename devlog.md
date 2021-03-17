@@ -4,11 +4,61 @@
 sudo /opt/lampp/lampp start
 tail -f /opt/lampp/logs/php_error_log
 
-sudo rm -r /opt/lampp/apps/sparqlpress
 sudo rm -r /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress*
+
+(sudo rm -r /opt/lampp/apps/sparqlpress)
 
 cd ~/sparqlpress
 ./zip.sh
+```
+
+**2021-03-17**
+
+Made some silly syntax errors last session - fixed.
+
+SparqlPress -> UPDATE Options, now getting:
+```
+Fatal error: Uncaught Error: Class "ARC2_ScutterStorePlugin" not found in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/arc/ARC2.php:354
+```
+
+Found mortenf's : http://bzr.mfd-consult.dk/scutter-store/
+```
+ARC2_ScutterStorePlugin.php 2008-02-25 22:14   21K  
+ARC2_SeeAlsosTrigger.php
+```
+but not available there, had to use archive.org.
+
+downloaded to ~/sparqlpress2 dir, to scutter.php added
+
+include 'ARC2_ScutterStorePlugin.php';
+
+Now -
+```
+Deprecated: Required parameter $caller follows optional parameter $a in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/ARC2_ScutterStorePlugin.php on line 18
+
+Deprecated: Required parameter $caller follows optional parameter $a in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/ARC2_ScutterStorePlugin.php on line 22
+
+Fatal error: Array and string offset access syntax with curly braces is no longer supported in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/ARC2_ScutterStorePlugin.php on line 524
+
+Notice: is_embed was called incorrectly. Conditional query tags do not work before the query is run. Before then, they always return false. Please see Debugging in WordPress for more information. (This message was added in version 3.1.0.) in /opt/lampp/apps/wordpress/htdocs/wp-includes/functions.php on line 5313
+
+Notice: is_search was called incorrectly. Conditional query tags do not work before the query is run. Before then, they always return false. Please see Debugging in WordPress for more information. (This message was added in version 3.1.0.) in /opt/lampp/apps/wordpress/htdocs/wp-includes/functions.php on line 5313
+```
+
+**2021-03-15**
+
+Updating Options, getting -
+```Warning: Undefined array key "sparqlpress_endpoint_timeout" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/endpoint.php on line 94
+
+Warning: Undefined array key "sparqlpress_scutter_active" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/scutter.php on line 137
+
+Warning: Undefined array key "sparqlpress_scutter_ifps" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/scutter.php on line 137
+
+Warning: Undefined array key "sparqlpress_scutter_cron_cycles_current" in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/scutter.php on line 137
+```
+Added checks of the form:
+```
+array_key_exists('sparqlpress_endpoint', $_POST)
 ```
 
 **2021-03-06**
