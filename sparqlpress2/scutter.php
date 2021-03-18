@@ -4,7 +4,7 @@ Revision: tag:morten@mfd-consult.dk,2010-02-19:13:15:36-y5cxg4ndacyey7n2
 */
 
 // DANNY
-include 'ARC2_ScutterStorePlugin.php';
+// include 'ARC2_ScutterStorePlugin.php';
 
 add_action('sparqlpress_init', 'sparqlpress_scutter_init');
 
@@ -30,6 +30,7 @@ function sparqlpress_scutter_init() {
     return;
   add_action('sparqlpress_option_page_form', 'sparqlpress_scutter_option_page_form', 5);
   add_action('sparqlpress_option_page_submit', 'sparqlpress_scutter_option_page_submit', 5);
+  /* DANNY - hiding
   if ($sparqlpress->store && $sparqlpress->options['scutter']['scutter_active']) {
     $sparqlpress->scutter = ARC2::getComponent('ScutterStorePlugin', array_merge($sparqlpress->store->a, $sparqlpress->options['scutter'], array('store_name' => $wpdb->prefix . 'sparqlpress_scutter')));
     add_action('admin_menu', 'sparqlpress_scutter_action_admin_menu');
@@ -38,7 +39,7 @@ function sparqlpress_scutter_init() {
     add_filter('sparqlpress_scutter_updated_graphs', 'sparqlpress_scutter_updated_graphs', 3);
     add_filter('sparqlpress_scutter_updated_graph', 'sparqlpress_scutter_updated_graph', 3);
     add_filter('sparqlpress_scutter_updated_nearby_graph', 'sparqlpress_scutter_updated_nearby_graph', 3);
-  }
+  }*/
 
   function sparqlpress_scutter_option_page_form() {
     global $sparqlpress;

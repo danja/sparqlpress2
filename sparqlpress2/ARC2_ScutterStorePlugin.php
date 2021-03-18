@@ -254,7 +254,7 @@ WHERE { ?r scutter:source ?url .
   /*
     getLock
   */
-  function getLock() {
+  function getLock($t_out = 10, $t_out_init = '') { // DANNY added $t_out = 10, $t_out_init = ''
       $con = $this->getDBCon();
     $k = 'scutter_running_since';
     $tbl = $this->getTablePrefix() . 'setting';

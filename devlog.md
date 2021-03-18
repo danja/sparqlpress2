@@ -12,6 +12,30 @@ cd ~/sparqlpress
 ./zip.sh
 ```
 
+**2021-03-18**
+
+Now on SparqlPress Information and Statistics,
+```
+Fatal error: Uncaught Error: Call to a member function escape() on null in /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress/arc/store/ARC2_Store.php:731
+...
+```
+
+That appears to be a reference to a non-existent DB. Scutter?
+
+Finding it hard to navigate through classes in Atom IDE so have shifted over to VS Code. PHP Intelephense extension was needed to get outline view.
+
+in SparqlPress Options :
+
+```
+Fatal error: Uncaught Exception: Table bitnami_wordpress.wp_sparqlpress_scutter_setting doesn't exist query: SELECT val FROM wp_sparqlpress_scutter_setting WHERE k = bddc1130bbd1649841fcdcbef002e0cb in /home/danny/sparqlpress/sparqlpress2/arc/vendor/thingengineer/mysqli-database-class/MysqliDb.php:2002 
+...
+```
+
+Temporarily disabled this chunk by scutter.php, line 34 (in function sparqlpress_scutter_init()) calls to :
+```
+ $sparqlpress->scutter = ARC2::getComponent('ScutterStorePlugin', array_merge($sparqlpress->store->a, $sparqlpress->options['scutter'], array('store_name' => $wpdb->prefix . 'sparqlpress_scutter')));
+ ```
+
 **2021-03-17**
 
 Made some silly syntax errors last session - fixed.
@@ -45,6 +69,8 @@ Notice: is_embed was called incorrectly. Conditional query tags do not work befo
 Notice: is_search was called incorrectly. Conditional query tags do not work before the query is run. Before then, they always return false. Please see Debugging in WordPress for more information. (This message was added in version 3.1.0.) in /opt/lampp/apps/wordpress/htdocs/wp-includes/functions.php on line 5313
 ```
 
+
+https://php.watch/versions/8.0/deprecate-required-param-after-optional
 **2021-03-15**
 
 Updating Options, getting -

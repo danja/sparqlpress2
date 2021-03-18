@@ -97,6 +97,10 @@ class sparqlpress {
     global $wp, $sparqlpress;
     if (is_404() && preg_match('|^sparqlpress/(.+?)/?$|', $wp->request, $M) && !preg_match('|^admin$|', $M[1])) {
       $hook = preg_replace('|[^_0-9a-z]|', '_', preg_replace('|/|', '_', $M[1]));
+      print('<br>$hook<br>');
+      print_r($hook);
+      print('<br>$hook<br>');
+      
       do {
         do_action('sparqlpress_request_'.$hook);
       } while (preg_match('|^(.+)_[^_]+$|', $hook, $M) && ($hook = $M[1]));
@@ -179,6 +183,9 @@ class sparqlpress {
     print '
       <div class="wrap sparqlpress">
         <h2>SparqlPress Information and Statistics</h2>';
+        print('<br>hooky<br>');
+            include 'util.php'; // DANNY
+            list_hooks('the_content');
     $stats = apply_filters('sparqlpress_info_stats', array());
     print '<table><tr>';
     foreach ($stats as $stat)

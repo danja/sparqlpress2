@@ -725,6 +725,9 @@ class ARC2_Store extends ARC2_Class
         }
         /* exact match */
         else {
+          print('<br>DB<br>'); // DANNY
+          print_r($this->db);
+          print('<br>DB<br>'); 
             $sql = 'SELECT id FROM '.$this->getTablePrefix().$tbl." WHERE val = BINARY '".$this->db->escape($val)."' LIMIT 1";
             $row = $this->db->fetchRow($sql);
 
