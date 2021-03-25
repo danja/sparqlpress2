@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../wp-plugin-play/plugins/wp-catcheck"
+			"path": "../wp-plugin-play/wp-catcheck"
 		}
 	],
 	"settings": {}
