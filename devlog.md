@@ -12,6 +12,63 @@ cd ~/sparqlpress
 ./zip.sh
 ```
 
+----
+### Files/Dirs (as of 2021-03-30**)
+
+* arc2-play : working from ARC2 alone                  
+* sparqlpress2 : old SparqlPress, with many tweaks 
+* arc-notes.md : *not much*               
+* sparqlpress.code-workspace : VS Code config (should be in .gitignore)
+* AUTHORS                     
+* sparqlpress-previous.zip 
+* sparqlpress.zip 
+* devlog.md                   
+* tools
+* install.md                  
+* wp-errors.log
+* LICENSE                     
+* wp-plugin-play : working from WP plugin alone
+* README.md                   
+* zip.sh 
+
+Not sure how I'll need to bundle ARC2 with the plugin, need to find out about using composer with WP. ARC2 composer install, following:
+```composer require semsol/arc2:^2```
+puts a bunch of stuff under 
+```arc2-play/vendor/```
+
+so for now at least putting that into .gitignore.
+
+----
+
+
+**2021-03-30**
+
+Trying a different general approach - start at current (working) WP & ARC2, build up from there.
+
+**WP Plugin alone**
+
+Made a "Hello World!" plugin - thought I might have it do something useful.
+
+
+
+**ARC2 alone**
+
+Downloaded from github
+
+tried mysql command line again - failed, needed to do :
+```
+sudo cp  /opt/lampp/etc/my.cnf /etc/
+```
+
+in mysqladmin added 
+
+user:danny
+host : localhost
+pass:maria
+Global privileges - all
+
+
+
 **2021-03-18**
 
 Now on SparqlPress Information and Statistics,

@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../wp-plugin-play/wp-catcheck"
+		},
+		{
+			"path": "../wp-plugin-play/graph-api"
+		},
+		{
+			"path": "../php"
 		}
 	],
 	"settings": {}
