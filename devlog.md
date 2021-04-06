@@ -1,44 +1,52 @@
 # SparqlPress2 Development log.
 
+For dev I've installed the XAMPP PHP etc. distro, to run:
 ```
 sudo /opt/lampp/lampp start
 tail -f /opt/lampp/logs/php_error_log
+```
 
+To rebuild plugin:
+```
 sudo rm -r /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress*
-
-(sudo rm -r /opt/lampp/apps/sparqlpress)
 
 cd ~/sparqlpress
 ./zip.sh
 ```
+Install by loading sparqlpress.zip with http://localhost/wordpress/wp-admin/plugins.php
+
 
 ----
-### Files/Dirs (as of 2021-03-30**)
+### Key Files/Dirs (as of 2021-04-06**)
+               
+* /sparqlpress-legacy : old SparqlPress (with many tweaks)  
+* /sparqlpress2 : new SparqlPress 
 
-* arc2-play : working from ARC2 alone                  
-* sparqlpress2 : old SparqlPress, with many tweaks 
-* arc-notes.md : *not much*               
-* sparqlpress.code-workspace : VS Code config (should be in .gitignore)
-* AUTHORS                     
-* sparqlpress-previous.zip 
-* sparqlpress.zip 
-* devlog.md                   
-* tools
-* install.md                  
-* wp-errors.log
+* install.md   
+
+* zip.sh : script to zip (package) the plugin
+* sparqlpress.zip : zipped plugin
+* sparqlpress-previous.zip : the version before current
+
+* devlog.md : this file
+* AUTHORS     
 * LICENSE                     
-* wp-plugin-play : working from WP plugin alone
-* README.md                   
-* zip.sh 
+* README.md            
+* sparqlpress.code-workspace : VS Code config (should be in .gitignore)       
+
 
 Not sure how I'll need to bundle ARC2 with the plugin, need to find out about using composer with WP. ARC2 composer install, following:
 ```composer require semsol/arc2:^2```
 puts a bunch of stuff under 
 ```arc2-play/vendor/```
 
-so for now at least putting that into .gitignore.
-
+so for now at least including all that in the zip
 ----
+
+**2021-04-06**
+
+Merged ARC2 experiment ([danbri-foaf.php](https://github.com/danja/sparqlpress2/blob/main/sparqlpress2/admin/danbri-foaf.php)) into the WP Plugin shell.
+
 
 **2021-04-02**
 
@@ -69,9 +77,6 @@ https://developer.wordpress.org/reference/functions/get_post_meta/
 
 https://developer.wordpress.org/reference/functions/get_metadata/
 
-
-----
-was in README.md
 
 **2021-03-30**
 

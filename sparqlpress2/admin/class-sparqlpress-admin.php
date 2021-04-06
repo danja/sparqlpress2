@@ -60,37 +60,6 @@ class SparqlPress_Admin
 	{
 		function sparqlpress_admin_menu()
 		{
-			/*
-			function sparqlpress_admin_page_contents() {
-				?>
-					<h1>
-						<?php esc_html_e( 'Welcome to my custom admin page.', 'my-plugin-textdomain' ); ?>
-					</h1>
-				<?php
-			}
-
-			error_log('sparqlpress_admin_menu() called');
-			
-			add_menu_page(
-				__('SparqlPress', 'my-textdomain'),
-				__('SparqlPress', 'my-textdomain'),
-				'manage_options',
-				'sample-page',
-				'sparqlpress_admin_page_contents',
-				'dashicons-admin-generic',
-				68
-			);
-			*/
-			/*
-			add_menu_page( 
-				string $page_title, 
-				string $menu_title, 
-				string $capability, 
-				string $menu_slug, 
-				callable $function = '', 
-				string $icon_url = '', 
-				int $position = null )
-			*/
 			add_menu_page(
 				__('SparqlPress', 'my-textdomain'),
 				__('SparqlPress', 'my-textdomain'),
@@ -109,9 +78,7 @@ class SparqlPress_Admin
 
 		add_action('admin_menu', 'sparqlpress_admin_menu');
 
-		function sparqlpress_adminfoaf_submenu()
-		{
-			/*
+		/*
 			add_submenu_page( 
 				string $parent_slug, 
 				string $page_title, 
@@ -121,7 +88,8 @@ class SparqlPress_Admin
 				callable $function = '', 
 				int $position = null )
 			*/
-
+		function sparqlpress_adminfoaf_submenu()
+		{
 			add_submenu_page(
 				'admin-index',
 				__('Danbri FOAF', 'textdomain'),
@@ -137,6 +105,24 @@ class SparqlPress_Admin
 			);
 		}
 		add_action('admin_menu', 'sparqlpress_adminfoaf_submenu');
+
+		function sparqlpress_store_admin_submenu()
+		{
+			add_submenu_page(
+				'admin-index',
+				__('Store Admin', 'textdomain'),
+				__('Store Admin', 'textdomain'),
+				'manage_options',
+				'store-admin',
+				function () {
+					$page = dirname(__FILE__) . '/store-admin.php';
+					include $page;
+					error_log('include called');
+					error_log($page);
+				}
+			);
+		}
+		add_action('admin_menu', 'sparqlpress_store_admin_submenu');
 
 		error_log('here');
 	}
