@@ -40,6 +40,49 @@ so for now at least putting that into .gitignore.
 
 ----
 
+**2021-04-02**
+
+Thinking about requirements, started [requirements.md](requirements.md)
+
+https://developer.wordpress.org/reference/functions/get_posts/
+```
+function get_posts( $args = null ) {
+    $defaults = array(
+        'numberposts'      => 5,
+        'category'         => 0,
+        'orderby'          => 'date',
+        'order'            => 'DESC',
+        'include'          => array(),
+        'exclude'          => array(),
+        'meta_key'         => '',
+        'meta_value'       => '',
+        'post_type'        => 'post',
+        'suppress_filters' => true,
+    );
+```
+
+https://developer.wordpress.org/reference/functions/get_post_meta/
+```
+
+https://developer.wordpress.org/reference/functions/get_post_meta/
+```
+function get_post_meta( $post_id, $key = '', $single = false ) {
+    return get_metadata( 'post', $post_id, $key, $single );
+}
+```
+
+https://developer.wordpress.org/reference/functions/get_metadata/
+```
+function get_metadata( $meta_type, $object_id, $meta_key = '', $single = false ) {
+    $value = get_metadata_raw( $meta_type, $object_id, $meta_key, $single );
+    if ( ! is_null( $value ) ) {
+        return $value;
+    }
+ 
+    return get_metadata_default( $meta_type, $object_id, $meta_key, $single );
+}
+```
+
 
 **2021-03-30**
 

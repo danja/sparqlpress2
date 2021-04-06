@@ -85,7 +85,7 @@ class CatCheck_Admin
 				__('CatCheck', 'my-textdomain'),
 				__('CatCheck', 'my-textdomain'),
 				'manage_options',
-				'sample-page',
+				'admin-index', // was sample-page
 				function () {
 					$index = dirname(__FILE__) . '/index.php';
 					include $index;

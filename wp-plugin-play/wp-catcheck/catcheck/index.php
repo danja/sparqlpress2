@@ -1,1 +1,5 @@
-<?php // Silence is golden
+HERE
+
+<?php 
+
+?>
