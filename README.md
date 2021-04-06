@@ -1,21 +1,18 @@
 # SparqlPress2
-SPARQL tools for Wordpress
-
-Attempting update of [SparqlPress](http://bzr.mfd-consult.dk/sparqlpress/) for [ARC2](https://github.com/semsol/arc2).
+SPARQL Tools for Wordpress
 
 ### Status 
 
 See [devlog.md](devlog.md) for *verbose* details (environment setup will be in [install.md](install.md)).
 
-**2021-03-30**
+**2021-04-06**
 
-Wordpress, ARC2 and even PHP itself have changed quite a lot since the original SparqlPress. 
+Wordpress, [ARC2](https://github.com/semsol/arc2) and even PHP have changed significanctly since the original [SparqlPress](http://bzr.mfd-consult.dk/sparqlpress/), not to mention the Web itself. Because of this, SparqlPress2 is being rebuilt from the ground up.
 
-I spent a fair amount of time trying to modify the old code to match the new environment. This started to feel very inefficient - especially since I'm not particularly familiar with Wordpress, ARC2 or even PHP...
+I've made rough start on requirements in [requirements.md](requirements.md)
 
-Now going in the other direction, starting from (working) Wordpress plugin & ARC2, thinking I'll use the original SparqlPress code more as a reference.
 
-In this direction, so far I've got a 'Hello World!'-ish WP plugin working, and a basic ARC2 test (loads a FOAF file from the Web into a triplestore, queries it with SPARQL, displays the results).
+
 
 ----
 

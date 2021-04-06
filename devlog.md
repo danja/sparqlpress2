@@ -62,27 +62,27 @@ function get_posts( $args = null ) {
 ```
 
 https://developer.wordpress.org/reference/functions/get_post_meta/
-```
+
 
 https://developer.wordpress.org/reference/functions/get_post_meta/
-```
-function get_post_meta( $post_id, $key = '', $single = false ) {
-    return get_metadata( 'post', $post_id, $key, $single );
-}
-```
+
 
 https://developer.wordpress.org/reference/functions/get_metadata/
-```
-function get_metadata( $meta_type, $object_id, $meta_key = '', $single = false ) {
-    $value = get_metadata_raw( $meta_type, $object_id, $meta_key, $single );
-    if ( ! is_null( $value ) ) {
-        return $value;
-    }
- 
-    return get_metadata_default( $meta_type, $object_id, $meta_key, $single );
-}
-```
 
+
+----
+was in README.md
+
+**2021-03-30**
+
+Wordpress, ARC2 and even PHP itself have changed quite a lot since the original SparqlPress. 
+
+I spent a fair amount of time trying to modify the old code to match the new environment. This started to feel very inefficient - especially since I'm not particularly familiar with Wordpress, ARC2 or even PHP...
+
+Now going in the other direction, starting from (working) Wordpress plugin & ARC2, thinking I'll use the original SparqlPress code more as a reference.
+
+In this direction, so far I've got a 'Hello World!'-ish WP plugin working, and a basic ARC2 test (loads a FOAF file from the Web into a triplestore, queries it with SPARQL, displays the results).
+----
 
 **2021-03-30**
 
