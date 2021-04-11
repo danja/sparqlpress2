@@ -3,7 +3,10 @@
 For dev I've installed the XAMPP PHP etc. distro, to run:
 ```
 sudo /opt/lampp/lampp start
-tail -f /opt/lampp/logs/php_error_log
+
+tail -f /opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
+
+// tail -f /opt/lampp/logs/php_error_log
 ```
 
 To rebuild plugin:
@@ -14,7 +17,6 @@ cd ~/sparqlpress
 ./zip.sh
 ```
 Install by loading sparqlpress.zip with http://localhost/wordpress/wp-admin/plugins.php
-
 
 ----
 ### Key Files/Dirs (as of 2021-04-06**)
@@ -42,6 +44,27 @@ puts a bunch of stuff under
 
 so for now at least including all that in the zip
 ----
+
+**2021-04-11**
+
+I wasn't having much joy with making more direct calls to functions from HTML/PHP pages so tried going via the REST API infrastructure. Slightly unnecessary indirection for most of the functionality required, but using REST API calls should hopefully simplify other bits further down the line. 
+
+So, via ```class-sparqlpress-admin.php``` I've added an admin menu item 'Store Admin' which corresponds to the page ```store-admin.php```.
+
+On that page is a button 'Scan Posts'. Clicking this leads to a call on the REST API endpoint
+```http://localhost/wordpress/wp-json/sparqlpress/v1/scan_posts```
+
+This 
+
+**2021-04-10**
+
+Installed utility plugins:
+
+https://wordpress.org/plugins/debug-bar/
+
+https://wordpress.org/plugins/debug-bar-actions-and-filters-addon/
+
+
 
 **2021-04-06**
 

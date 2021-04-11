@@ -1,5 +1,6 @@
 <?php
 
+include 'post-scanner.php';
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -50,11 +51,15 @@ class SparqlPress_Admin
 	 */
 	public function __construct($plugin_name, $version)
 	{
-
+		error_log('SparqlPress_Admin __construct called');
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->init_menu();
+
+		$post_scanner = new Post_Scanner();
+		add_action('rest_api_init', array( $post_scanner , 'register_routes' ) );
 	}
+
 
 	function init_menu()
 	{
@@ -64,12 +69,12 @@ class SparqlPress_Admin
 				__('SparqlPress', 'my-textdomain'),
 				__('SparqlPress', 'my-textdomain'),
 				'manage_options',
-				'admin-index', // was sample-page
+				'admin-index',
 				function () {
 					$index = dirname(__FILE__) . '/index.php';
 					include $index;
-					error_log('include called');
-					error_log($index);
+				//	error_log('include called');
+				//	error_log($index);
 				},
 				'dashicons-admin-generic',
 				68
@@ -124,7 +129,7 @@ class SparqlPress_Admin
 		}
 		add_action('admin_menu', 'sparqlpress_store_admin_submenu');
 
-		error_log('here');
+		error_log('sparqlpress_store_admin_submenu() called');
 	}
 
 	/**

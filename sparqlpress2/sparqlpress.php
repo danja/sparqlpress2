@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       SparqlPress
  * Plugin URI:        https://github.com/danja/sparqlpress2
- * Description:       A simple category checker
+ * Description:       Adds SPARQL capabilities
  * Version:           1.0.0
  * Author:            Danny Ayers
  * Author URI:        http://hyperdata.it
