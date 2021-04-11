@@ -14,9 +14,34 @@ class Post_Scanner extends WP_REST_Controller
     public function scan_posts($params)
     {
         error_log('scan_posts called');
+        $args = array(
+            'numberposts' => -1
+          );
+           
+        $all_posts = get_posts($args);
+        
+        $turtle = '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                   @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+                   @prefix owl: <http://www.w3.org/2002/07/owl#> .
+                   @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+                   @prefix dc: <http://purl.org/dc/terms/> .    
+                   @prefix schema: <https://schema.org/> .';
+
+        foreach ($all_posts as $post)  {
+            $turtle = $turtle.PHP_EOL.' <'.$post->guid.'> a schema:BlogPosting .';
+        }
+//          echo "<br/><br/><br/>ID<br/>";
+//          echo $post->ID; 
+//          echo "<br/><br/><br/>ID<br/>";
+//          echo $post->guid;
+
+error_log($turtle);
+
+// $parser = ARC2::getTurtleParser();
+
+
 
         $url = get_site_url() . '/wp-admin/admin.php?page=store-admin';
-
         wp_redirect($url);
         exit;
 

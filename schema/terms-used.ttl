@@ -1,0 +1,33 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+
+@prefix schema: <https://schema.org/> .
+
+schema:Blog a rdfs:Class ;
+    rdfs:label "Blog" ;
+    rdfs:comment "A blog." ;
+    rdfs:subClassOf schema:CreativeWork .
+    
+schema:BlogPosting a rdfs:Class ;
+    rdfs:label "BlogPosting" ;
+    rdfs:comment "A blog post." ;
+    rdfs:subClassOf schema:SocialMediaPosting .
+    
+schema:blogPost a rdf:Property ;
+    rdfs:label "blogPost" ;
+    rdfs:comment "A posting that is part of this blog." ;
+    schema:domainIncludes schema:Blog ;
+    schema:rangeIncludes schema:BlogPosting .
+    
+schema:name a rdf:Property ;
+    rdfs:label "name" ;
+    rdfs:comment "The name of the item." ;
+    rdfs:subPropertyOf rdfs:label ;
+    ns2:equivalentProperty <http://purl.org/dc/terms/title> ;
+    schema:domainIncludes schema:Thing ;
+    schema:rangeIncludes schema:Text .
+    
+    
