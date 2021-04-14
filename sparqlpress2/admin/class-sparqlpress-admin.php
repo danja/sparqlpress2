@@ -1,6 +1,8 @@
 <?php
 
-include 'post-scanner.php';
+include_once 'arc2-adapter.php';
+include_once 'post-scanner.php';
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -56,6 +58,9 @@ class SparqlPress_Admin
 		$this->version = $version;
 		$this->init_menu();
 
+		$arc2_adapter = ARC2_Adapter::getInstance();
+		// new ARC2_Adapter();
+		add_action('rest_api_init', array( $arc2_adapter , 'register_routes' ) );
 		$post_scanner = new Post_Scanner();
 		add_action('rest_api_init', array( $post_scanner , 'register_routes' ) );
 	}
@@ -110,6 +115,24 @@ class SparqlPress_Admin
 			);
 		}
 		add_action('admin_menu', 'sparqlpress_adminfoaf_submenu');
+
+		function sparqlpress_endpoint_submenu()
+		{
+			add_submenu_page(
+				'admin-index',
+				__('SPARQL', 'textdomain'),
+				__('SPARQL', 'textdomain'),
+				'manage_options',
+				'SPARQL Endpoint',
+				function () {
+					$page = dirname(__FILE__) . '/sparql-endpoint.php';
+					include $page;
+					error_log('include called');
+					error_log($page);
+				}
+			);
+		}
+		add_action('admin_menu', 'sparqlpress_endpoint_submenu');
 
 		function sparqlpress_store_admin_submenu()
 		{

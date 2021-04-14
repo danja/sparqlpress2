@@ -45,6 +45,27 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-04-14**
+
+Turned the arc2-adapter into a singleton
+
+trying to get the endpoint working
+
+problem I think because the URL
+
+http://localhost/wordpress/wp-admin/admin.php?query=SELECT+*+WHERE+%7B%0D%0A++GRAPH+%3Fg+%7B+%3Fs+%3Fp+%3Fo+.+%7D%0D%0A%7D%0D%0ALIMIT+10&output=&jsonp=&key=
+
+is getting intercepted before getting to ARC2
+
+**2021-04-13**
+
+arc2-adapter (with store create) & post-scanner set up in class-sparqlpress-admin.php __construct
+
+
+
+https://github.com/semsol/arc2/wiki/SPARQL-Endpoint-Setup
+
+
 **2021-04-11**
 
 I wasn't having much joy with making more direct calls to functions from HTML/PHP pages so tried going via the REST API infrastructure. Slightly unnecessary indirection for most of the functionality required, but using REST API calls should hopefully simplify other bits further down the line. 
@@ -55,6 +76,8 @@ On that page is a button 'Scan Posts'. Clicking this leads to a call on the REST
 ```http://localhost/wordpress/wp-json/sparqlpress/v1/scan_posts```
 
 This 
+
+..what??
 
 **2021-04-10**
 

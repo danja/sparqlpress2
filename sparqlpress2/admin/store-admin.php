@@ -19,6 +19,15 @@ function sparqlpress_scan_test()
 
 <!-- form action="<?php echo admin_url('admin-post.php'); ?>"  method="POST" -->
 
+<form action="<?php echo site_url('wp-json/sparqlpress/v1/create_store'); ?>" method="POST">
+
+    <!-- http://localhost/wordpress/wp-json/sparqlpress/v1/scan_posts -->
+
+    <input type="hidden" name="action" value="create_store">
+    <!-- input type="text" name="test" value="TEST" -->
+    <?php submit_button('Create Store'); ?>
+</form>
+
 <form action="<?php echo site_url('wp-json/sparqlpress/v1/scan_posts'); ?>" method="POST">
 
     <!-- http://localhost/wordpress/wp-json/sparqlpress/v1/scan_posts -->
@@ -27,3 +36,4 @@ function sparqlpress_scan_test()
     <!-- input type="text" name="test" value="TEST" -->
     <?php submit_button('Scan Posts'); ?>
 </form>
+

@@ -2,7 +2,7 @@
 
 // include_once("../arc2/ARC2.php");
 
-require dirname(__FILE__).'/../arc2/vendor/autoload.php';
+require_once dirname(__FILE__).'/../arc2/vendor/autoload.php';
 
 $config = array(
     /* db */
