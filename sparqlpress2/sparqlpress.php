@@ -39,19 +39,19 @@ define( 'SPARQLPRESS_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-sparqlpress-activator.php
+ * This action is documented in includes/sparqlpress-activator.php
  */
 function activate_sparqlpress() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-sparqlpress-activator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/sparqlpress-activator.php';
 	SparqlPress_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-sparqlpress-deactivator.php
+ * This action is documented in includes/sparqlpress-deactivator.php
  */
 function deactivate_sparqlpress() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-sparqlpress-deactivator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/sparqlpress-deactivator.php';
 	SparqlPress_Deactivator::deactivate();
 }
 
@@ -62,7 +62,7 @@ register_deactivation_hook( __FILE__, 'deactivate_sparqlpress' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-sparqlpress.php';
+require plugin_dir_path( __FILE__ ) . 'includes/sparqlpress.php';
 
 /**
  * Begins execution of the plugin.
