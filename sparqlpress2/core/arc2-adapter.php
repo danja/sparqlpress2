@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__).'/../arc2/vendor/autoload.php';
+require_once dirname(__FILE__) . '/../arc2/vendor/autoload.php';
 // used as singleton
 
 class ARC2_Adapter extends WP_REST_Controller
@@ -19,10 +19,10 @@ class ARC2_Adapter extends WP_REST_Controller
         /* store */
         'store_name' => 'arc_tests',
         /* network */
-        /*
-'proxy_host' => '192.168.1.1',
-'proxy_port' => 8080,
-*/
+        /* 'proxy_host' => '192.168.1.1',
+           'proxy_port' => 8080,
+        */
+        
         /* parsers */
         'bnode_prefix' => 'bn',
         /* sem html extraction */
@@ -46,12 +46,11 @@ class ARC2_Adapter extends WP_REST_Controller
 
     public static function getInstance()
     {
-      if (self::$instance == null)
-      {
-        self::$instance = new ARC2_Adapter();
-      }
-   
-      return self::$instance;
+        if (self::$instance == null) {
+            self::$instance = new ARC2_Adapter();
+        }
+
+        return self::$instance;
     }
 
     public function create_store()

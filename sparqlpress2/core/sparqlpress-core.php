@@ -13,6 +13,12 @@
  * @subpackage SparqlPress/includes
  */
 
+include_once 'arc2-adapter.php';
+include_once 'store.php';
+include_once 'post-scanner.php';
+include_once 'endpoint.php';
+
+
 /**
  * The core plugin class.
  *
@@ -78,6 +84,13 @@ class SparqlPress {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+
+		$this->options = get_option('sparqlpress');
+		if (!is_array($this->options)){
+		  $this->options = array();
+		  update_option('sparqlpress', $this->options, 'yes' );
+		}
+
 		error_log('__construct() called');
 	}
 

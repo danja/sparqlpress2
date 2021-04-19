@@ -45,6 +45,10 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-04-19**
+
+Renamed a load of the WP plugin boilerplate files from 'class-X.php' to 'X.php', they were just distracting.
+ 
 **2021-04-14**
 
 Turned the arc2-adapter into a singleton

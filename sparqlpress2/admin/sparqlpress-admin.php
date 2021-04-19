@@ -1,7 +1,11 @@
 <?php
 
+/*
 include_once 'arc2-adapter.php';
 include_once 'post-scanner.php';
+include_once 'endpoint.php';
+include_once 'store.php';
+*/
 
 /**
  * The admin-specific functionality of the plugin.
@@ -116,6 +120,9 @@ class SparqlPress_Admin
 		}
 		add_action('admin_menu', 'sparqlpress_adminfoaf_submenu');
 
+
+		// BETTER?  error_log(plugin_dir_path( __FILE__ ) . 'core/sparqlpress-core.php');
+
 		function sparqlpress_endpoint_submenu()
 		{
 			add_submenu_page(
@@ -125,7 +132,10 @@ class SparqlPress_Admin
 				'manage_options',
 				'SPARQL Endpoint',
 				function () {
-					$page = dirname(__FILE__) . '/sparql-endpoint.php';
+					$page = plugin_dir_path( __FILE__ ) . '../core/endpoint.php';
+					error_log('ENDPOINT PATH');
+					error_log($page);
+				//	$page = dirname(__FILE__) . '/core/endpoint.php'; // '/sparql-endpoint.php';
 					include $page;
 					error_log('include called');
 					error_log($page);

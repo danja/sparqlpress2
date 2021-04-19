@@ -62,7 +62,10 @@ register_deactivation_hook( __FILE__, 'deactivate_sparqlpress' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/sparqlpress.php';
+
+// error_log(plugin_dir_path( __FILE__ ) . 'core/sparqlpress-core.php');
+
+require plugin_dir_path( __FILE__ ) . 'core/sparqlpress-core.php';
 
 /**
  * Begins execution of the plugin.
@@ -74,9 +77,11 @@ require plugin_dir_path( __FILE__ ) . 'includes/sparqlpress.php';
  * @since    1.0.0
  */
 function run_sparqlpress() {
-
-	$plugin = new SparqlPress();
-	$plugin->run();
-
+	global $sparqlpress;
+	load_plugin_textdomain('sparqlpress'); ////
+	$sparqlpress = new SparqlPress();
+	$sparqlpress->run();
+	do_action('sparqlpress_init');
 }
+
 run_sparqlpress();
