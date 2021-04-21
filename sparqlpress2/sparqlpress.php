@@ -67,6 +67,7 @@ register_deactivation_hook( __FILE__, 'deactivate_sparqlpress' );
 
 require plugin_dir_path( __FILE__ ) . 'core/sparqlpress-core.php';
 
+
 /**
  * Begins execution of the plugin.
  *
@@ -80,8 +81,9 @@ function run_sparqlpress() {
 	global $sparqlpress;
 	load_plugin_textdomain('sparqlpress'); ////
 	$sparqlpress = new SparqlPress();
-	$sparqlpress->run();
 	do_action('sparqlpress_init');
+	$sparqlpress->run();
+	
 }
-
-run_sparqlpress();
+add_action('plugins_loaded', 'run_sparqlpress');
+// run_sparqlpress();

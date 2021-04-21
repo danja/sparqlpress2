@@ -97,7 +97,7 @@ class ARC2_LegacyHTMLSerializer extends ARC2_Class
         /* doc envelope, in case of sub-structure serializing */
         if (!$raw && (0 == $level) && ($node['level'] > 1)) {
             $r = '<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html $r @@@@ xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <head>

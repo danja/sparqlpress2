@@ -484,7 +484,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         }
 
         return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+      <html @@@@ getHTMLTableSelectResultDoc xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
       '.$this->getHTMLDocHead().'
       <body>
         <table>
@@ -990,7 +990,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
     public function getHTMLFormDoc()
     {
         return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+      <getHTMLFormDoc @@@@ html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
       '.$this->getHTMLDocHead().'
       '.$this->getHTMLDocBody().'
       </html>

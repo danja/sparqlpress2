@@ -23,6 +23,31 @@
 
 ## Use Cases
 
+```
+    // Data Generation, using WP info
+    #  include_once('foaf/skos/sioc');
+
+    // Data Storage, infrastructure (read)
+    include_once('store.php');
+    include_once('endpoint.php');
+
+    // Data Storage, infrastructure (write)
+    include_once('scutter.php');
+
+    // Data Linking, administration of linking
+    include_once('linking/accounts.php');
+    include_once('linking/grouping.php');
+    include_once('linking/gsg.php');
+    include_once('linking/rapleaf.php');
+    include_once('linking/sha1sum.php');
+    include_once('linking/me.php');
+    include_once('linking/accounts-as-homepages.php');
+
+    // Data Usage, use of infrastructure and linking
+    include_once('widgets/foafnaut-html.php');
+    include_once('widgets/triplecount.php');
+    include_once('display/comments.php');
+    ```
 
 **Scanning**
 

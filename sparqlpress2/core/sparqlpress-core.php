@@ -94,6 +94,34 @@ class SparqlPress {
 		error_log('__construct() called');
 	}
 
+	/// copied from legacy sparqlpress.php
+
+function option_page_form() {
+    global $sparqlpress;
+    print '
+      <div class="wrap sparqlpress">
+        <form method="post" action="">';
+    wp_nonce_field('sparqlpress-options');
+    if ($sparqlpress->store && $sparqlpress->store->isSetUp()) {
+      print '
+        <h2>SparqlPress Options</h2>
+          <input type="hidden" name="sparqlpress_action" value="update" />
+          <p class="submit">
+            <input type="submit" name="Submit" value="' . __('Update Options') . '" />
+          </p>';
+    } else
+      print '<input type="hidden" name="sparqlpress_action" value="create" />';
+    do_action('sparqlpress_option_page_form');
+    if ($sparqlpress->store && $sparqlpress->store->isSetUp()) {
+      print '
+        <p class="submit">
+          <input type="submit" name="Submit" value="' . __('Update Options') . '" />
+        </p>';
+    }
+    print '
+      </form></div>';
+  }
+  
 	/**
 	 * Load the required dependencies for this plugin.
 	 *

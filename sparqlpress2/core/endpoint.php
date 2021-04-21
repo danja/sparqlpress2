@@ -3,7 +3,7 @@
 Revision: tag:morten@mfd-consult.dk,2010-02-19:13:15:36-y5cxg4ndacyey7n2
 */
 
-error_log('endpoint.php');
+error_log('endpoint.php run');
 
 add_action('sparqlpress_init', 'sparqlpress_endpoint_init');
 
@@ -11,6 +11,7 @@ if (!function_exists('sparqlpress_endpoint_init')) {
     function sparqlpress_endpoint_init() // endpoint
     {
         global $sparqlpress;
+        error_log('function sparqlpress_endpoint_init()');
         $sparqlpress->endpoint = false;
         add_action('sparqlpress_option_page_form', 'sparqlpress_endpoint_option_page_form', 3);
         add_action('sparqlpress_option_page_submit', 'sparqlpress_endpoint_option_page_submit', 3);

@@ -6,7 +6,12 @@ sudo /opt/lampp/lampp start
 
 tail -f /opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
 
+/opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
+
 // tail -f /opt/lampp/logs/php_error_log
+
+-rw-r--r-- 1 daemon daemon 949014 Apr 20 14:03 /opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
+
 ```
 
 To rebuild plugin:
