@@ -25,7 +25,7 @@
 
 ```
     // Data Generation, using WP info
-    #  include_once('foaf/skos/sioc');
+    .... include_once('foaf/skos/sioc');
 
     // Data Storage, infrastructure (read)
     include_once('store.php');
