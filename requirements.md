@@ -23,7 +23,8 @@
 
 ## Use Cases
 
-```
+----
+
     // Data Generation, using WP info
     .... include_once('foaf/skos/sioc');
 
@@ -47,7 +48,8 @@
     include_once('widgets/foafnaut-html.php');
     include_once('widgets/triplecount.php');
     include_once('display/comments.php');
-    ```
+
+----
 
 **Scanning**
 
