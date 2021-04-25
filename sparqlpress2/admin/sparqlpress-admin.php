@@ -1,11 +1,6 @@
 <?php
 
-/*
-include_once 'arc2-adapter.php';
-include_once 'post-scanner.php';
-include_once 'endpoint.php';
-include_once 'store.php';
-*/
+
 
 /**
  * The admin-specific functionality of the plugin.
@@ -130,13 +125,13 @@ class SparqlPress_Admin
 				__('SPARQL', 'textdomain'),
 				__('SPARQL', 'textdomain'),
 				'manage_options',
-				'SPARQL Endpoint',
+				'endpoint', // SPARQL Endpoint 
 				function () {
 					$page = plugin_dir_path( __FILE__ ) . '../core/endpoint.php';
 					error_log('ENDPOINT PATH');
 					error_log($page);
 				//	$page = dirname(__FILE__) . '/core/endpoint.php'; // '/sparql-endpoint.php';
-					include $page;
+					include_once $page;
 					error_log('include called');
 					error_log($page);
 				}
@@ -172,19 +167,6 @@ class SparqlPress_Admin
 	 */
 	public function enqueue_styles()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in SparqlPress_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The SparqlPress_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-name-admin.css', array(), $this->version, 'all');
 	}
 
@@ -207,7 +189,8 @@ class SparqlPress_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
+		wp_enqueue_style('yasgui-css', plugins_url('css/yasgui.min.css',__FILE__ ));
+		wp_enqueue_script('yasgui-js', plugins_url('js/yasgui.min.js',__FILE__ ));
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/plugin-name-admin.js', array('jquery'), $this->version, false);
 	}
 }

@@ -6,11 +6,7 @@ sudo /opt/lampp/lampp start
 
 tail -f /opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
 
-/opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
-
 // tail -f /opt/lampp/logs/php_error_log
-
--rw-r--r-- 1 daemon daemon 949014 Apr 20 14:03 /opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
 
 ```
 
@@ -48,6 +44,19 @@ puts a bunch of stuff under
 ```arc2-play/vendor/```
 
 so for now at least including all that in the zip
+----
+
+**2021-04-25**
+
+Looking at getting SPARQL endpoint working, wasted a lot of time looking back at the legacy SparqlPress codebase. 
+
+A SPARQL GUI is desirable, so trying [Yasgui](https://triply.cc/docs/yasgui) from TriplyDB. It's the one I've used before in Fuseki, is very nice.
+
+----
+$screen = get_current_screen(); 
+print_r($screen);
+
+WP_Screen Object ( [action] => [base] => sparqlpress_page_SPARQL Endpoint [columns:WP_Screen:private] => 0 [id] => sparqlpress_page_SPARQL Endpoint [in_admin:protected] => site [is_network] => [is_user] => [parent_base] => admin-index [parent_file] => admin-index [post_type] => [taxonomy] => [_help_tabs:WP_Screen:private] => Array ( ) [_help_sidebar:WP_Screen:private] => [_screen_reader_content:WP_Screen:private] => Array ( ) [_options:WP_Screen:private] => Array ( ) [_show_screen_options:WP_Screen:private] => [_screen_settings:WP_Screen:private] => [is_block_editor] => )
 ----
 
 **2021-04-19**

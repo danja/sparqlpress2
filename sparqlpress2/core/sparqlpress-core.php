@@ -16,7 +16,7 @@
 include_once 'arc2-adapter.php';
 include_once 'store.php';
 include_once 'post-scanner.php';
-include_once 'endpoint.php';
+// include_once 'endpoint.php';
 
 
 /**
