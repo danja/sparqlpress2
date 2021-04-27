@@ -9,7 +9,7 @@ class ARC2_Adapter extends WP_REST_Controller
     private static $instance = null;
 
     var $namespace = 'sparqlpress/v1';
-    var $base = 'create_store';
+    
     var $config = array(
         /* db */
         'db_host' => 'localhost', /* default: localhost */
@@ -42,6 +42,7 @@ class ARC2_Adapter extends WP_REST_Controller
 
     public function __construct()
     {
+
     }
 
     public static function getInstance()
@@ -77,14 +78,39 @@ class ARC2_Adapter extends WP_REST_Controller
         return ARC2::getStoreEndpoint($this->config);
     }
 
+    public function get_results()
+    {
+        $endpoint = $this->getEndpoint();
+
+        if (!$endpoint->isSetUp()) {
+            $endpoint->setUp();
+        }
+    
+        $endpoint->handleRequest();
+        $endpoint->sendHeaders();
+    
+        error_log($endpoint->getResult());
+    
+       // echo $endpoint->getResult();
+    return $endpoint->getResult();
+        // error_log(json_encode($endpoint, JSON_PRETTY_PRINT));
+    // $endpoint->go();
+    }
+
     public function register_routes()
     {
         error_log('ARC2_Adapter->register_routes called');
-        register_rest_route($this->namespace, '/' . $this->base, array(
+        register_rest_route($this->namespace, '/create_store', array(
             'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
-            'callback'            => array($this, 'create_store'),
+            'callback'            => array($this, 'create_store')
             //  'permission_callback' => array( $this, 'create_item_permissions_check' ),
             // 'args'                => $this->get_endpoint_args_for_item_schema( true ),
         ));
+        register_rest_route($this->namespace, '/sparql', array(
+            // By using this constant we ensure that when the WP_REST_Server changes our readable endpoints will work as intended.
+            'methods'  => WP_REST_Server::ALLMETHODS,
+            // Here we register our callback. The callback is fired when this endpoint is matched by the WP_REST_Server class.
+            'callback' => array($this, 'get_results')
+        ) );
     }
 }

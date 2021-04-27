@@ -1,48 +1,42 @@
 <?php
 
 error_log('endpoint.php run');
+error_log($_SERVER['REQUEST_METHOD']);
+
+global $sparqlpress;
 
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //   $sparqlpress->endpoint->go();
 
-// echo $_SERVER['REQUEST_URI'];
-/*
-function yasgui_head() {
-    echo '<link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />';
-    echo '<script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>';
-}
+    $arc2_adapter = ARC2_Adapter::getInstance();
 
-add_action( 'admin_head', 'yasgui_head' );
-*/
+    $endpoint = $arc2_adapter->getEndpoint();
 
-/*
-add_action('admin_enqueue_scripts', 'yasgui_head');
- 
-function yasgui_head($hook) {
-    // your-slug => The slug name to refer to this menu used in "add_submenu_page"
-        // tools_page => refers to Tools top menu, so it's a Tools' sub-menu page
-    if ( 'sparqlpress_page_endpoint' != $hook ) {
-        error_log('function yasgui_head hook = '.$hook);
-        return;
+    if (!$endpoint->isSetUp()) {
+        $endpoint->setUp();
     }
- 
-    wp_enqueue_style('yasgui-css', plugins_url('admin/css/yasgui.min.css',__FILE__ ));
-    wp_enqueue_script('yasgui-js', plugins_url('admin/js/yasgui.min.js',__FILE__ ));
-}
-*/
 
-/*
-echo '<div id="yasgui"></div>';
-echo '<script>';
-echo 'const yasgui = new Yasgui(document.getElementById("yasgui"));';
-echo '</script>';
-*/
+    
+    $endpoint->handleRequest();
+    $endpoint->sendHeaders();
+
+    error_log($endpoint->getResult());
+
+    echo $endpoint->getResult();
+
+    // error_log(json_encode($endpoint, JSON_PRETTY_PRINT));
+// $endpoint->go();
+exit();
+
+}
+
 
 ?>
 
 
 
-    <div id="yasgui"></div>
-    <script>
-        const yasgui = new Yasgui(document.getElementById("yasgui"));
-    </script>
-
+<div id="yasgui"></div>
+<script>
+    const yasgui = new Yasgui(document.getElementById("yasgui"));
+</script>

@@ -46,18 +46,25 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-04-27**
+
+Got the SPARQL endpoint hooked in properly, seems to be basically working.
+
+Next, tidy up, get it doing something useful.
+
+https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/#creating-endpoints
+
 **2021-04-25**
 
 Looking at getting SPARQL endpoint working, wasted a lot of time looking back at the legacy SparqlPress codebase. 
 
 A SPARQL GUI is desirable, so trying [Yasgui](https://triply.cc/docs/yasgui) from TriplyDB. It's the one I've used before in Fuseki, is very nice.
 
-----
-$screen = get_current_screen(); 
-print_r($screen);
+Got the query form into endpoint.php (inclusion of the yasgui script & css done via enqueue in all of admin section - not ideal, but near enough for now).
 
-WP_Screen Object ( [action] => [base] => sparqlpress_page_SPARQL Endpoint [columns:WP_Screen:private] => 0 [id] => sparqlpress_page_SPARQL Endpoint [in_admin:protected] => site [is_network] => [is_user] => [parent_base] => admin-index [parent_file] => admin-index [post_type] => [taxonomy] => [_help_tabs:WP_Screen:private] => Array ( ) [_help_sidebar:WP_Screen:private] => [_screen_reader_content:WP_Screen:private] => Array ( ) [_options:WP_Screen:private] => Array ( ) [_show_screen_options:WP_Screen:private] => [_screen_settings:WP_Screen:private] => [is_block_editor] => )
-----
+The query is working against ARC2 and producing results (in SPARQL JSON format) which can be seen in the log. The return pipeline of WP messes this up. So now have to figure out how to put this into WP as a (very) custom endpoint.
+
+https://developer.wordpress.org/rest-api/extending-the-rest-api/controller-classes/
 
 **2021-04-19**
 
@@ -78,8 +85,6 @@ is getting intercepted before getting to ARC2
 **2021-04-13**
 
 arc2-adapter (with store create) & post-scanner set up in class-sparqlpress-admin.php __construct
-
-
 
 https://github.com/semsol/arc2/wiki/SPARQL-Endpoint-Setup
 
