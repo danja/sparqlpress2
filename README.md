@@ -1,20 +1,62 @@
 # SparqlPress2
 SPARQL Tools for Wordpress
 
-### Status 
-
-See [devlog.md](devlog.md) for *verbose* details (environment setup will be in [install.md](install.md)).
-
-**2021-04-06**
-
 Wordpress, [ARC2](https://github.com/semsol/arc2) and even PHP have changed significanctly since the original [SparqlPress](http://bzr.mfd-consult.dk/sparqlpress/), not to mention the Web itself. Because of this, SparqlPress2 is being rebuilt from the ground up.
 
-I've made rough start on requirements in [requirements.md](requirements.md)
+### Installation
+
+SparqlPress is built as a standard Wordpress plugin, in zip format. 
+
+**NOTE : although there is little likelihood of the current version causing any damage to an existing system, to try it out a disposable Wordpress installation is recommended. Some new database tables are created that aren't removed on uninstall, cruft will be left behind.**
+
+There are some notes on installing Wordpress from scratch in [install.md](install.md).
+
+#### To install on an existing Wordpress installation :
+
+* Download the file [sparqlpress.zip](https://github.com/danja/sparqlpress2/blob/main/sparqlpress.zip) to a temporary location
+
+* Navigate to the **Admin Dashboard** (http://*[host]*/*[name]*/wp-admin/index.php)
+
+* In the left-hand menu you should see an entry **Plugins**, click this
+
+* Click **Add New**
+
+* Click **Upload Plugin**
+
+* Click **Choose File** and select the downloaded [sparqlpress.zip](https://github.com/danja/sparqlpress2/blob/main/sparqlpress.zip) 
+
+* Click **Install Now**
+
+Possibly after a short delay, you should see a message *Plugin installed successfully.*
+
+* Click **Activate Plugin**
+
+A new menu item **SparqlPress** should now have appeared.
+
+What is does will be documented in the [manual](manual.md).
 
 
+#### Uninstalling
 
+SparqlPress can be installed from the Wordpress Dashboard by selecting **Plugins**, scrolling to the Sparqlpress entry and clicking **Deactivate**, then once deactivated clicking **Delete**.
+
+An alternative is deleting the associate files, eg.
+
+```sudo rm -r /opt/lampp/apps/wordpress/htdocs/wp-content/plugins/sparqlpress*```
+
+For a full clean-up, you will also need to DROP the database tables created by SparqlPress using an SQL client such as mysqladmin (command line) or phpMyAdmin (over web). 
+
+### Status 2021-04-28
+
+It doesn't do anything useful yet.
+
+See [devlog.md](devlog.md) for *verbose* details 
+
+I've made rough start on [requirements](requirements.md).
 
 ----
+
+### Legacy Notes
 
 *The goal for SparqlPress is easy-to-use, low-barrier-of-entry, access to the linked data web. There are two, intimately-related sides to the idea: producing data, and consuming it. One goal is to make it easy for Wordpress to expose more data in SPARQL-friendly form. Another is to make it easier to use a Wordpress installation as a personal, perhaps even private, local aggregation of such data.* 
 
