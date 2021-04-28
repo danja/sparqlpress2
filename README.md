@@ -13,7 +13,7 @@ There are some notes on installing Wordpress from scratch in [install.md](instal
 
 #### To install on an existing Wordpress installation :
 
-* Download the file [sparqlpress.zip](https://github.com/danja/sparqlpress2/blob/main/sparqlpress.zip) to a temporary location
+* Download the file [sparqlpress.zip](https://github.com/danja/sparqlpress2/raw/main/sparqlpress.zip) to a temporary location
 
 * Navigate to the **Admin Dashboard** (http://*[host]*/*[name]*/wp-admin/index.php)
 
