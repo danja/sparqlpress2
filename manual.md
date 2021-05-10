@@ -8,7 +8,14 @@ TODO : shift installation notes here
 
 **2021-04-28**
 
-Menu items at the moment are mostly just to hook into little tests, except for  'SPARQL' which is more or less as it needs to be.
+Menu items at the moment are mostly just to hook into little tests, except for  'SPARQL' which is more or less as it needs to be - little bit of tweaking needed,
+**you may have to enter the endpoint URI** -
+
+http://*[host]*/*[site name]*/wp-json/sparqlpress/v1/sparql
+
+(mine keeps forgetting, maybe just Chrome cache)
+
+
 
 * SparqlPress - lists IDs/URLs of Posts
 * DANBRI - reads https://danbri.org/foaf.rdf into the ARC2 store, runs a SPARQL query to list names

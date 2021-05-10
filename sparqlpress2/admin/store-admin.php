@@ -2,6 +2,18 @@ STORE ADMIN
 
 <?php
 
+global $wpdb;
+
+error_log("------------------------------------------");
+error_log($wpdb->dbhost);
+error_log($wpdb->dbname);
+error_log($wpdb->dbuser);
+error_log($wpdb->dbpassword);
+
+error_log($_SERVER['SERVER_NAME']);
+error_log("------------------------------------------");
+
+
 /* was attempt at direct call
 add_action('admin_post_sparqlpress_scan', 'sparqlpress_scan_test');
 
@@ -20,8 +32,6 @@ function sparqlpress_scan_test()
 <!-- form action="<?php echo admin_url('admin-post.php'); ?>"  method="POST" -->
 
 <form action="<?php echo site_url('wp-json/sparqlpress/v1/create_store'); ?>" method="POST">
-
-    <!-- http://localhost/wordpress/wp-json/sparqlpress/v1/scan_posts -->
 
     <input type="hidden" name="action" value="create_store">
     <!-- input type="text" name="test" value="TEST" -->

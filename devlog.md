@@ -46,6 +46,38 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-05-10**
+
+Spent a while trying to get yasgui to use correct endpoint URL. 
+Think it's a bit closer (in endpoint.php), but not quite there yet... 
+
+Store Admin -> Post Scanner is now putting triples into store, for now just GUID (URI) and title, eg.
+
+ <http://localhost/wordpress/?p=80> a schema:BlogPosting ;
+ dc:title "A first post!" .
+
+*but* some results are rejected by yasgui. It looks like ARC2 will accept illegal characters in literals, so I need to do a bit of string sanitizing.
+
+For me I can do :
+
+SELECT * WHERE {
+  ?sub ?pred ?obj .
+} 
+LIMIT 18
+
+but up the limit and it fails.
+
+in post-scanner.php, grabbing post data, eg.
+
+[10-May-2021 19:23:17 UTC] {"ID":1,"post_author":"1","post_date":"2021-02-06 11:01:38","post_date_gmt":"2021-02-06 11:01:38","post_content":"<!-- wp:paragraph -->\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!<\/p>\n<!-- \/wp:paragraph -->","post_title":"Hello world!","post_excerpt":"","post_status":"publish","comment_status":"open","ping_status":"open","post_password":"","post_name":"hello-world","to_ping":"","pinged":"","post_modified":"2021-02-06 11:01:38","post_modified_gmt":"2021-02-06 11:01:38","post_content_filtered":"","post_parent":0,"guid":"http:\/?p=1","menu_order":0,"post_type":"post","post_mime_type":"","comment_count":"1","filter":"raw"}
+
+
+**2021-05-08**
+
+global $wbdp is database settings 
+
+set up to create ARC2 store using creds from here, store name (hardcoded) 'sparqlpress'
+
 **2021-04-27**
 
 Got the SPARQL endpoint hooked in properly, seems to be basically working.

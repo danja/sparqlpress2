@@ -167,7 +167,7 @@ class SparqlPress_Admin
 	 */
 	public function enqueue_styles()
 	{
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-name-admin.css', array(), $this->version, 'all');
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/sparqlpress-admin.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -179,8 +179,6 @@ class SparqlPress_Admin
 	{
 
 		/**
-		 * This function is provided for demonstration purposes only.
-		 *
 		 * An instance of this class should be passed to the run() function
 		 * defined in SparqlPress_Loader as all of the hooks are defined
 		 * in that particular class.
@@ -191,6 +189,6 @@ class SparqlPress_Admin
 		 */
 		wp_enqueue_style('yasgui-css', plugins_url('css/yasgui.min.css',__FILE__ ));
 		wp_enqueue_script('yasgui-js', plugins_url('js/yasgui.min.js',__FILE__ ));
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/plugin-name-admin.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/sparqlpress-admin.js', array('jquery'), $this->version, false);
 	}
 }
