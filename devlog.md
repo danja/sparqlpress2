@@ -49,7 +49,7 @@ so for now at least including all that in the zip
 **2021-05-10**
 
 Spent a while trying to get yasgui to use correct endpoint URL. 
-Think it's a bit closer (in endpoint.php), but not quite there yet... 
+Think it's a bit closer (the JS in endpoint.php), but not yasgui config quite there yet (docs rather confusing), will need to pull the URL from PHP. 
 
 Store Admin -> Post Scanner is now putting triples into store, for now just GUID (URI) and title, eg.
 
