@@ -1,5 +1,7 @@
 <?php
 
+// set_time_limit(0);
+
 error_log('endpoint.php run');
 error_log($_SERVER['REQUEST_METHOD']);
 
@@ -7,7 +9,8 @@ global $sparqlpress;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //   $sparqlpress->endpoint->go();
+
+  error_log("HANDLING POST");
 
     $arc2_adapter = ARC2_Adapter::getInstance();
 
@@ -18,17 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
+  //  $endpoint->go();
+
     $endpoint->handleRequest();
     $endpoint->sendHeaders();
 
-    error_log($endpoint->getResult());
+    error_log("Result = ");
+ error_log($endpoint->getResult());
 
-    echo $endpoint->getResult();
+
+echo $endpoint->getResult();
+
 
     // error_log(json_encode($endpoint, JSON_PRETTY_PRINT));
     // $endpoint->go();
-    exit();
-}
+    // exit();
+} 
 ?>
 
 <div id="yasgui"></div>
@@ -59,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       ];
     }
 
+    /*
     var tab = yasgui.addTab(
         true, // set as active tab
         {
@@ -66,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             name: "Posts"
         }
     );
+    */
     var query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
