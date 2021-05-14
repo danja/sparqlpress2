@@ -65,6 +65,7 @@ class Post_Scanner extends WP_REST_Controller
         register_rest_route($this->namespace, '/' . $this->base, array(
             'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
             'callback'            => array($this, 'scan_posts'),
+            'permission_callback' => '__return_true'
             //  'permission_callback' => array( $this, 'create_item_permissions_check' ),
             // 'args'                => $this->get_endpoint_args_for_item_schema( true ),
         ));

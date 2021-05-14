@@ -160,15 +160,17 @@ class ARC2_Adapter extends WP_REST_Controller
         error_log('ARC2_Adapter->register_routes called');
         register_rest_route($this->namespace, '/create_store', array(
             'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
-            'callback'            => array($this, 'create_store')
+            'callback'            => array($this, 'create_store'),
             //  'permission_callback' => array( $this, 'create_item_permissions_check' ),
             // 'args'                => $this->get_endpoint_args_for_item_schema( true ),
+            'permission_callback' => '__return_true'
         ));
         register_rest_route($this->namespace, '/sparql', array(
             // By using this constant we ensure that when the WP_REST_Server changes our readable endpoints will work as intended.
             'methods'  => WP_REST_Server::ALLMETHODS,
             // Here we register our callback. The callback is fired when this endpoint is matched by the WP_REST_Server class.
-            'callback' => array($this, 'get_results')
+            'callback' => array($this, 'get_results'),
+            'permission_callback' => '__return_true'
         ));
     }
 }
