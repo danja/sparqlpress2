@@ -46,6 +46,70 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-05-14**
+
+//// tired, for tomorrow - maybe Content-Length: 7061 doesn't match the correct length..? Strange, because counting chars from error_log give me 7063 chars/bytes (no spaces 4099).  
+
+from curl :
+* Excess found in a read: excess = 1173, size = 7061, maxdownload = 7061, bytecount = 0
+
+need to read curl manual...
+
+----
+
+SPARQL response is getting cut off before it's finished (with LIMIT 20). It *is* showing the correct data from ARC2 (when sent to error_log()). 
+
+was getting :
+register_rest_route (since 5.5.0; The REST API route definition for <code>sparqlpress/v1/scan_posts</code> is missing the required <code>permission_callback</code> argument. For REST API routes that are intended to be public, use <code>__return_true</code> as the permission callback.)
+
+- easy fix, adding 'permission_callback' => '__return_true'
+to register_rest_route methods
+
+No change to cut off results...
+
+trying -
+
+curl -X POST -d 'query=SELECT * WHERE { ?sub ?pred ?obj }  LIMIT 20' http://localhost/wordpress/wp-json/sparqlpress/v1/sparql
+
+hah, get (full) sparql xml results
+
+curl -X POST -d 'query=SELECT * WHERE { ?sub ?pred ?obj }  LIMIT 20' -H "Accept: application/sparql-results+json,*/*;q=0.9" http://localhost/wordpress/wp-json/sparqlpress/v1/sparql
+
+yields JSON, results cut off
+
+curl -v -d 'query=SELECT * WHERE { ?sub ?pred ?obj }  LIMIT 20' -H "Accept: application/sparql-results+json,*/*;q=0.9" http://localhost/wordpress/wp-json/sparqlpress/v1/sparql
+
+*   Trying 127.0.0.1:80...
+* Connected to localhost (127.0.0.1) port 80 (#0)
+> POST /wordpress/wp-json/sparqlpress/v1/sparql HTTP/1.1
+> Host: localhost
+> User-Agent: curl/7.71.1
+> Accept: application/sparql-results+json,*/*;q=0.9
+> Content-Length: 50
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 50 out of 50 bytes
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Date: Fri, 14 May 2021 19:21:36 GMT
+< Server: Apache/2.4.46 (Unix) OpenSSL/1.1.1i PHP/8.0.1 mod_perl/2.0.11 Perl/v5.32.0
+< X-Powered-By: PHP/8.0.1
+< X-Robots-Tag: noindex
+< Link: <http://localhost/wordpress/wp-json/>; rel="https://api.w.org/"
+< X-Content-Type-Options: nosniff
+< Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages, Link
+< Access-Control-Allow-Headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type
+< Vary: Accept
+< Content-Length: 7061
+< Allow: GET, POST, PUT, PATCH, DELETE
+< Content-Type: application/sparql-results+json
+< 
+* Excess found in a read: excess = 1173, size = 7061, maxdownload = 7061, bytecount = 0
+
+
+
+
+
 **2021-05-10**
 
 Spent a while trying to get yasgui to use correct endpoint URL. 
