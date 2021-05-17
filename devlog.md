@@ -46,6 +46,12 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-05-17**
+
+Not sure of exact fault, but found root cause of cut off responses : I had virtually identical code in 2 places responding to queries. Getting rid of one of these sorted the problem.
+
+Need to tidy up a litle before adding anything else...
+
 **2021-05-14**
 
 //// tired, for tomorrow - maybe Content-Length: 7061 doesn't match the correct length..? Strange, because counting chars from error_log give me 7063 chars/bytes (no spaces 4099).  

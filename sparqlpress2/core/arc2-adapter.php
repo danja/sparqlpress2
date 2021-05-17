@@ -112,6 +112,8 @@ class ARC2_Adapter extends WP_REST_Controller
         return ARC2::getStoreEndpoint($this->config);
     }
 
+    
+    // rename, or return results..?
     public function get_results()
     {
         $endpoint = $this->getEndpoint();
@@ -123,13 +125,16 @@ class ARC2_Adapter extends WP_REST_Controller
         $endpoint->handleRequest();
         $endpoint->sendHeaders();
 
-        error_log($endpoint->getResult());
+        $results = $endpoint->getResult();
+        error_log("Result = ");
+        error_log($results);
+        echo $results;
 
-        // echo $endpoint->getResult();
-        return $endpoint->getResult();
+        
         // error_log(json_encode($endpoint, JSON_PRETTY_PRINT));
         // $endpoint->go();
     }
+
 
     public function add_turtle($turtle)
     {
