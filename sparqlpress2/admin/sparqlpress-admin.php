@@ -25,6 +25,8 @@
 class SparqlPress_Admin
 {
 
+	var $namespace = 'sparqlpress/v1';
+
 	/**
 	 * The ID of this plugin.
 	 *
@@ -57,11 +59,37 @@ class SparqlPress_Admin
 		$this->version = $version;
 		$this->init_menu();
 
-		$arc2_adapter = ARC2_Adapter::getInstance();
-		// new ARC2_Adapter();
-		add_action('rest_api_init', array( $arc2_adapter , 'register_routes' ) );
+		$this->arc2_adapter = ARC2_Adapter::getInstance();
+
 		$post_scanner = new Post_Scanner();
-		add_action('rest_api_init', array( $post_scanner , 'register_routes' ) );
+		//	add_action('rest_api_init', array( $arc2_adapter , 'register_routes' ) );
+		add_action('rest_api_init', array($this, 'register_routes'));
+		add_action('rest_api_init', array($post_scanner, 'register_routes'));
+	}
+
+	// was in arc2_adapter
+	public function register_routes()
+	{
+		error_log('sparqlpress-admin->register_routes called');
+		register_rest_route($this->namespace, '/create_store', array(
+			'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
+			'callback'            => array($this->arc2_adapter, 'create_store'),
+			'permission_callback' => '__return_true'
+		));
+
+					//  'permission_callback' => array( $this, 'create_item_permissions_check' ),
+			// 'args'                => $this->get_endpoint_args_for_item_schema( true ),
+
+		register_rest_route($this->namespace, '/sparql', array(
+			'methods'  => WP_REST_Server::ALLMETHODS,
+			'callback' => array($this->arc2_adapter, 'get_results'),
+			'permission_callback' => '__return_true'
+		));
+		register_rest_route($this->namespace, '/add_data', array(
+			'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
+			'callback'            => array($this->arc2_adapter, 'add_data'),
+			'permission_callback' => '__return_true'
+		));
 	}
 
 
@@ -77,8 +105,8 @@ class SparqlPress_Admin
 				function () {
 					$index = dirname(__FILE__) . '/index.php';
 					include $index;
-				//	error_log('include called');
-				//	error_log($index);
+					//	error_log('include called');
+					//	error_log($index);
 				},
 				'dashicons-admin-generic',
 				68
@@ -127,7 +155,7 @@ class SparqlPress_Admin
 				'manage_options',
 				'endpoint', // SPARQL Endpoint 
 				function () {
-					$page = plugin_dir_path( __FILE__ ) . '../core/endpoint.php';
+					$page = plugin_dir_path(__FILE__) . '../core/endpoint.php';
 					include_once $page;
 				}
 			);
@@ -182,8 +210,8 @@ class SparqlPress_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_style('yasgui-css', plugins_url('css/yasgui.min.css',__FILE__ ));
-		wp_enqueue_script('yasgui-js', plugins_url('js/yasgui.min.js',__FILE__ ));
+		wp_enqueue_style('yasgui-css', plugins_url('css/yasgui.min.css', __FILE__));
+		wp_enqueue_script('yasgui-js', plugins_url('js/yasgui.min.js', __FILE__));
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/sparqlpress-admin.js', array('jquery'), $this->version, false);
 	}
 }
