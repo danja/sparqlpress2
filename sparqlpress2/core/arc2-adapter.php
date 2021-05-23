@@ -105,6 +105,8 @@ class ARC2_Adapter extends WP_REST_Controller
         exit;
     }
 
+
+    // RENAME TO UPLOAD DATA
     // https://developer.wordpress.org/reference/functions/media_handle_upload/
     public function add_data() // REST call
     {

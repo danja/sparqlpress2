@@ -50,6 +50,11 @@ so for now at least including all that in the zip
 
 Have been looking at prior scutter work. Provisional vocab at : http://purl.org/stuff/scutter
 
+Obvious way of putting in a scutterplan (and lots of other things) - make an Upload Data button (on Store Admin).
+
+Getting there, but :
+"Sorry, this file type is not permitted for security reasons."
+Seems a straightforward wp-config thing, but had enough for today.
 
 
 **2021-05-17**

@@ -38,7 +38,7 @@ function sparqlpress_scan_test()
 
 <form action="<?php echo site_url('wp-json/sparqlpress/v1/add_data'); ?>" method="POST" enctype="multipart/form-data">
     <input type="file" id="sparqlpress_data" name="sparqlpress_data" multiple="false">
-    <?php submit_button('Add Data'); ?>
+    <?php submit_button('Upload Data'); ?>
 </form>
 
 <hr>
