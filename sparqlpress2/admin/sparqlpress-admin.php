@@ -128,12 +128,7 @@ class SparqlPress_Admin
 				'endpoint', // SPARQL Endpoint 
 				function () {
 					$page = plugin_dir_path( __FILE__ ) . '../core/endpoint.php';
-					error_log('ENDPOINT PATH');
-					error_log($page);
-				//	$page = dirname(__FILE__) . '/core/endpoint.php'; // '/sparql-endpoint.php';
 					include_once $page;
-					error_log('include called');
-					error_log($page);
 				}
 			);
 		}

@@ -46,6 +46,12 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-05-23**
+
+Have been looking at prior scutter work. Provisional vocab at : http://purl.org/stuff/scutter
+
+
+
 **2021-05-17**
 
 Not sure of exact fault, but found root cause of cut off responses : I had virtually identical code in 2 places responding to queries. Getting rid of one of these sorted the problem.
