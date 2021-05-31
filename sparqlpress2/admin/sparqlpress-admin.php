@@ -64,8 +64,70 @@ class SparqlPress_Admin
 		$post_scanner = new Post_Scanner();
 		//	add_action('rest_api_init', array( $arc2_adapter , 'register_routes' ) );
 		add_action('rest_api_init', array($this, 'register_routes'));
-		add_action('rest_api_init', array($post_scanner, 'register_routes'));
+		add_action('rest_api_init', array($post_scanner, 'register_routes')); // exists?
+
+		add_filter('upload_mimes', array($this, 'rdf_mime_types'));
+		add_filter( 'wp_check_filetype_and_ext', array($this, 'rdf_extensions'), 10, 4 );
 	}
+
+	// added pretty much everything possible, likely rejected later 
+	function rdf_mime_types($mimes)
+	{
+		error_log('adding mimes');
+		$mimes['rdf'] = 'application/rdf+xml';
+		$mimes['nt'] = 'application/n-triples';
+		$mimes['ttl'] = 'text/turtle';
+		$mimes['nq'] = 'application/n-quads';
+		$mimes['trig'] = 'application/trig';
+		$mimes['n3'] = 'text/n3';
+		$mimes['jsonld'] = 'application/ld+json';
+		$mimes['trix'] = 'application/trix';
+		$mimes['srj'] = 'application/sparql-results+json';
+		return $mimes;
+	}
+
+	
+function rdf_extensions( $types, $file, $filename, $mimes ) {
+	error_log('adding extensions');
+    if ( false !== strpos( $filename, '.rdf' ) ) {
+        $types['ext'] = 'rdf';
+        $types['type'] = 'application/rdf+xml';
+    }
+    if ( false !== strpos( $filename, '.nt' ) ) {
+        $types['ext'] = 'nt';
+        $types['type'] = 'application/n-triples';
+    }
+	if ( false !== strpos( $filename, '.ttl' ) ) {
+        $types['ext'] = 'ttl';
+        $types['type'] = 'text/turtle';
+    }
+	if ( false !== strpos( $filename, '.nq' ) ) {
+        $types['ext'] = 'nq';
+        $types['type'] = 'application/n-quads';
+    }
+	if ( false !== strpos( $filename, '.trig' ) ) {
+        $types['ext'] = 'trig';
+        $types['type'] = 'application/trig';
+    }
+	if ( false !== strpos( $filename, '.n3' ) ) {
+        $types['ext'] = 'n3';
+        $types['type'] = 'text/n3';
+    }
+	if ( false !== strpos( $filename, '.jsonld' ) ) {
+        $types['ext'] = 'jsonld';
+        $types['type'] = 'application/ld+json';
+    }
+	if ( false !== strpos( $filename, '.trix' ) ) {
+        $types['ext'] = 'trix';
+        $types['type'] = 'application/trix';
+    }
+	if ( false !== strpos( $filename, '.srj' ) ) {
+        $types['ext'] = 'srj';
+        $types['type'] = 'application/sparql-results+json';
+    }
+    return $types;
+}
+
 
 	// was in arc2_adapter
 	public function register_routes()
@@ -77,17 +139,17 @@ class SparqlPress_Admin
 			'permission_callback' => '__return_true'
 		));
 
-					//  'permission_callback' => array( $this, 'create_item_permissions_check' ),
-			// 'args'                => $this->get_endpoint_args_for_item_schema( true ),
+		//  'permission_callback' => array( $this, 'create_item_permissions_check' ),
+		// 'args'                => $this->get_endpoint_args_for_item_schema( true ),
 
 		register_rest_route($this->namespace, '/sparql', array(
 			'methods'  => WP_REST_Server::ALLMETHODS,
 			'callback' => array($this->arc2_adapter, 'get_results'),
 			'permission_callback' => '__return_true'
 		));
-		register_rest_route($this->namespace, '/add_data', array(
+		register_rest_route($this->namespace, '/upload_data', array(
 			'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
-			'callback'            => array($this->arc2_adapter, 'add_data'),
+			'callback'            => array($this->arc2_adapter, 'upload_data'),
 			'permission_callback' => '__return_true'
 		));
 	}
