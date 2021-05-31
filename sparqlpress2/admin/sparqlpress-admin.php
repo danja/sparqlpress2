@@ -152,6 +152,11 @@ function rdf_extensions( $types, $file, $filename, $mimes ) {
 			'callback'            => array($this->arc2_adapter, 'upload_data'),
 			'permission_callback' => '__return_true'
 		));
+		register_rest_route($this->namespace, '/scan_page', array(
+			'methods'             => WP_REST_Server::ALLMETHODS, // CREATABLE for POST
+			'callback'            => array($this->arc2_adapter, 'scan_page'),
+			'permission_callback' => '__return_true'
+		));
 	}
 
 

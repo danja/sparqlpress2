@@ -20,6 +20,11 @@ cd ~/sparqlpress
 Install by loading sparqlpress.zip with http://localhost/wordpress/wp-admin/plugins.php
 
 ----
+error_log(json_encode($movefile));
+
+ error_log(print_r( $movefile, true ));
+
+----
 ### Key Files/Dirs (as of 2021-04-06**)
                
 * /sparqlpress-legacy : old SparqlPress (with many tweaks)  
@@ -45,6 +50,10 @@ puts a bunch of stuff under
 
 so for now at least including all that in the zip
 ----
+
+**2021-05-31**
+
+Upload Data (Turtle) is working
 
 **2021-05-23**
 
