@@ -51,6 +51,155 @@ puts a bunch of stuff under
 so for now at least including all that in the zip
 ----
 
+**2021-06-16**
+
+Having a quick look at http://en.lodlive.it/ as a visualization.
+
+One snag (at least) seems to be that LodLive isn't specifying 
+
+```Accept: application/sparql-results+json,*/*;q=0.9```
+
+instead using URLs of the form :
+
+Request URL: http://localhost/wordpress/wp-json/sparqlpress/v1/sparql?output=json&format=application/json&timeout=0&query=SELECT%20DISTINCT%20%3Fobject%20%20WHERE%20%7B%5B%5D%20a%20%3Fobject%7D%20ORDER%20BY%20%3Fobject%20%20LIMIT%2050%20%20&callback=lodlive
+
+it *should* be straightforward to add a check for
+
+output=json&format=application/json
+
+(bit messy against HTTP, but shouldn't break the Web).
+
+grrr, that took a long while, but in 
+ARC2_StoreEndpoint.php, line 307
+
+  // quick & dirty intercept to override
+        // application/sparql-results+json
+        // with application/javascript
+        // for specific query params
+
+https://developer.wordpress.org/apis/handbook/global-variables/
+
+WP_Post Object
+(
+    [ID] =>
+    [post_author] =>
+    [post_date] => 
+    [post_date_gmt] => 
+    [post_content] => 
+    [post_title] => 
+    [post_excerpt] => 
+    [post_status] =>
+    [comment_status] =>
+    [ping_status] => 
+    [post_password] => 
+    [post_name] =>
+    [to_ping] => 
+    [pinged] => 
+    [post_modified] => 
+    [post_modified_gmt] =>
+    [post_content_filtered] => 
+    [post_parent] => 
+    [guid] => 
+    [menu_order] =>
+    [post_type] =>
+    [post_mime_type] => 
+    [comment_count] =>
+    [filter] =>
+)
+
+error_log(print_r(get_user_meta(1), true ));
+
+
+(
+    [nickname] => Array
+        (
+            [0] => wordpress
+        )
+
+    [first_name] => Array
+        (
+            [0] => 
+        )
+
+    [last_name] => Array
+        (
+            [0] => 
+        )
+
+    [description] => Array
+        (
+            [0] => 
+        )
+
+    [rich_editing] => Array
+        (
+            [0] => true
+        )
+
+    [syntax_highlighting] => Array
+        (
+            [0] => true
+        )
+
+    [comment_shortcuts] => Array
+        (
+            [0] => false
+        )
+
+    [admin_color] => Array
+        (
+            [0] => fresh
+        )
+
+    [use_ssl] => Array
+        (
+            [0] => 0
+        )
+
+    [show_admin_bar_front] => Array
+        (
+            [0] => true
+        )
+
+    [locale] => Array
+        (
+            [0] => 
+        )
+
+    [wp_capabilities] => Array
+        (
+            [0] => a:1:{s:13:"administrator";b:1;}
+        )
+
+    [wp_user_level] => Array
+        (
+            [0] => 10
+        )
+
+    [dismissed_wp_pointers] => Array
+        (
+            [0] => 
+        )
+
+    [show_welcome_panel] => Array
+        (
+            [0] => 1
+        )
+
+    [session_tokens] => Array
+        (
+            [0] => a:1:{s:64:"8ee3a7912d494302bf13012e24ed767588e9b46b2c6c4be26cc5e67edb6d75b0";a:4:{s:10:"expiration";i:1624368083;s:2:"ip";s:3:"::1";s:2:"ua";s:104:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36";s:5:"login";i:1623158483;}}
+        )
+
+    [wp_dashboard_quick_press_last_post_id] => Array
+        (
+            [0] => 421
+        )
+
+)
+
+
+
 **2021-05-31**
 
 Upload Data (Turtle) is working

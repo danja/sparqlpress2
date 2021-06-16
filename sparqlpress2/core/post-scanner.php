@@ -22,6 +22,8 @@ class Post_Scanner extends WP_REST_Controller
 
         $all_posts = get_posts($args);
 
+        $site = home_url();
+
         $turtle = '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
                    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
                    @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -32,17 +34,21 @@ class Post_Scanner extends WP_REST_Controller
         foreach ($all_posts as $post) {
 
             error_log(json_encode($post));
+
             $turtle = $turtle . PHP_EOL . ' <' . $post->guid . '> a schema:BlogPosting ;'
-            . PHP_EOL . ' dc:title "' . $post->post_title . '" .';
-            
+            . PHP_EOL . ' dc:title "' . $post->post_title . '" ;'
+            . PHP_EOL . ' dc:title "' . $post->post_author . '" .';
+            $turtle = $turtle . PHP_EOL . ' <' . $site . '> schema:blogPost <' . $post->guid . '> .';
         }
-        //          echo "<br/><br/><br/>ID<br/>";
-        //          echo $post->ID; 
-        //          echo "<br/><br/><br/>ID<br/>";
-        //          echo $post->guid;
 
         error_log($turtle);
 
+        error_log(print_r(get_user_meta(1), true ));
+
+        // error_log('get_blog_details'); ERROR
+       // error_log(print_r(get_blog_details(1), true ));
+
+         
         // $parser = ARC2::getTurtleParser();
         $arc2_adapter = ARC2_Adapter::getInstance();
 

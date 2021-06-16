@@ -335,6 +335,11 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'htmltab' => 'HTMLTable',
             'tsv' => 'TSV',
         ];
+
+        ///
+        // error_log(json_encode($movefile));
+        error_log(print_r( $this, true ));
+        error_log('HERE getSelectResultDoc');
         if ($f = $this->getResultFormat($formats, 'xml')) {
             $m = 'get'.$f.'SelectResultDoc';
 

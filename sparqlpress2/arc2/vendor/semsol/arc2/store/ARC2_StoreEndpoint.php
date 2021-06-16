@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ARC2 SPARQL Endpoint.
  *
@@ -27,6 +28,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $this->a['store_allow_extension_functions'] = $this->v('store_allow_extension_functions', 0, $this->a);
         $this->allow_sql = $this->v('endpoint_enable_sql_output', 0, $this->a);
         $this->result = '';
+        $this->javascript = false;
     }
 
     public function getQueryString($mthd = '')
@@ -45,7 +47,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $mthd = strtolower($mthd);
         if ($multi) {
             $qs = $this->getQueryString($mthd);
-            if (preg_match_all('/\&'.$name.'=([^\&]+)/', $qs, $m)) {
+            if (preg_match_all('/\&' . $name . '=([^\&]+)/', $qs, $m)) {
                 foreach ($m[1] as $i => $val) {
                     $m[1][$i] = stripslashes($val);
                 }
@@ -73,8 +75,12 @@ class ARC2_StoreEndpoint extends ARC2_Store
 
     public function sendHeaders()
     {
+        error_log('$this->headers');
+        error_log(print_r($this->headers, true ));
+
+
         if (!isset($this->is_dump) || !$this->is_dump) {
-            $this->setHeader('content-length', 'Content-Length: '.strlen($this->getResult()));
+            $this->setHeader('content-length', 'Content-Length: ' . strlen($this->getResult()));
             foreach ($this->headers as $k => $v) {
                 header($v);
             }
@@ -106,7 +112,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             if ($this->p('show_inline')) {
                 $this->query_result = '
           <div class="results">
-            '.('htmltab' != $this->p('output') ? '<pre>'.htmlspecialchars($this->getResult()).'</pre>' : $this->getResult()).'
+            ' . ('htmltab' != $this->p('output') ? '<pre>' . htmlspecialchars($this->getResult()) . '</pre>' : $this->getResult()) . '
           </div>
         ';
                 $this->handleEmptyRequest(1);
@@ -183,6 +189,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             $p->parse($q);
             $infos = $p->getQueryInfos();
         }
+
         /* errors? */
         if ($errors = $this->getErrors()) {
             $this->setHeader('http', 'HTTP/1.1 400 Bad Request');
@@ -212,7 +219,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         if (!in_array($qt, $this->getFeatures())) {
             $this->setHeader('http', 'HTTP/1.1 401 Access denied');
             $this->setHeader('content-type', 'Content-type: text/plain; charset=utf-8');
-            $this->result = 'Access denied for "'.$qt.'" query';
+            $this->result = 'Access denied for "' . $qt . '" query';
 
             return true;
         }
@@ -220,7 +227,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         if (in_array($qt, ['load', 'insert', 'delete']) && isset($_GET['query'])) {
             $this->setHeader('http', 'HTTP/1.1 501 Not Implemented');
             $this->setHeader('content-type', 'Content-type: text/plain; charset=utf-8');
-            $this->result = 'Query type "'.$qt.'" not supported via GET';
+            $this->result = 'Query type "' . $qt . '" not supported via GET';
 
             return true;
         }
@@ -228,7 +235,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         if (!in_array($qt, ['select', 'ask', 'describe', 'construct', 'load', 'insert', 'delete', 'dump'])) {
             $this->setHeader('http', 'HTTP/1.1 501 Not Implemented');
             $this->setHeader('content-type', 'Content-type: text/plain; charset=utf-8');
-            $this->result = 'Unsupported query type "'.$qt.'"';
+            $this->result = 'Unsupported query type "' . $qt . '"';
 
             return true;
         }
@@ -242,17 +249,17 @@ class ARC2_StoreEndpoint extends ARC2_Store
         if ($errors = $this->getErrors()) {
             $this->setHeader('http', 'HTTP/1.1 400 Bad Request');
             $this->setHeader('content-type', 'Content-type: text/plain; charset=utf-8');
-            $this->result = 'Error: '.implode("\n", $errors);
+            $this->result = 'Error: ' . implode("\n", $errors);
 
             return true;
         }
         /* result */
-        $m = 'get'.ucfirst($qt).'ResultDoc';
+        $m = 'get' . ucfirst($qt) . 'ResultDoc';
         if (method_exists($this, $m)) {
             $this->result = $this->$m($r);
         } else {
             $this->setHeader('content-type', 'Content-type: text/plain; charset=utf-8');
-            $this->result = 'Result serializer not available, dumping raw data:'."\n".print_r($r, 1);
+            $this->result = 'Result serializer not available, dumping raw data:' . "\n" . print_r($r, 1);
         }
     }
 
@@ -296,6 +303,25 @@ class ARC2_StoreEndpoint extends ARC2_Store
         if (($v = $this->p('format')) || ($v = $this->p('output'))) {
             $prefs[] = $v;
         }
+
+        // quick & dirty intercept to override
+        // application/sparql-results+json
+        // with application/javascript
+        // for specific query params
+
+        $qs = $_SERVER['QUERY_STRING'];
+
+        if (strpos($qs, 'output=json') !== false) {
+            $this->javascript = true;
+            $_SERVER['HTTP_ACCEPT']= 'application/json,*/*;q=0.9';
+            error_log('override');
+        }
+        if (strpos($qs, 'format=application/json') !== false) {
+            $this->javascript = true;
+            $_SERVER['HTTP_ACCEPT']= 'application/json,*/*;q=0.9';
+            error_log('override');
+        }
+
         /* accept header */
         $vals = explode(',', $_SERVER['HTTP_ACCEPT']);
         if ($vals) {
@@ -313,6 +339,9 @@ class ARC2_StoreEndpoint extends ARC2_Store
                 $prefs[] = $val;
             }
         }
+        error_log('$vals = ');
+        error_log(print_r($vals, true));
+
         /* default */
         $prefs[] = $default;
         foreach ($prefs as $pref) {
@@ -326,6 +355,14 @@ class ARC2_StoreEndpoint extends ARC2_Store
 
     public function getSelectResultDoc($r)
     {
+
+        // $r is result object
+        error_log('HERE getSelectResultDoc');
+        error_log('$r = ');
+        error_log(print_r($r, true));
+        // error_log('$this = ');
+        // error_log(print_r( $this, true ));
+
         $formats = [
             'xml' => 'SPARQLXML', 'sparql-results+xml' => 'SPARQLXML',
             'json' => 'SPARQLJSON', 'sparql-results+json' => 'SPARQLJSON',
@@ -336,7 +373,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'tsv' => 'TSV',
         ];
         if ($f = $this->getResultFormat($formats, 'xml')) {
-            $m = 'get'.$f.'SelectResultDoc';
+            $m = 'get' . $f . 'SelectResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -352,52 +389,61 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $nl = "\n";
         /* doc */
-        $r = ''.
-      '<?xml version="1.0"?>'.
-      $nl.'<sparql xmlns="http://www.w3.org/2005/sparql-results#">'.
-    '';
+        $r = '' .
+            '<?xml version="1.0"?>' .
+            $nl . '<sparql xmlns="http://www.w3.org/2005/sparql-results#">' .
+            '';
         /* head */
-        $r .= $nl.'  <head>';
-        $r .= $nl.'    <!-- query time: '.round($dur, 4).' sec -->';
+        $r .= $nl . '  <head>';
+        $r .= $nl . '    <!-- query time: ' . round($dur, 4) . ' sec -->';
         if (is_array($vars)) {
             foreach ($vars as $var) {
-                $r .= $nl.'    <variable name="'.$var.'"/>';
+                $r .= $nl . '    <variable name="' . $var . '"/>';
             }
         }
-        $r .= $nl.'  </head>';
+        $r .= $nl . '  </head>';
         /* results */
-        $r .= $nl.'  <results>';
+        $r .= $nl . '  <results>';
         if (is_array($rows)) {
             foreach ($rows as $row) {
-                $r .= $nl.'    <result>';
+                $r .= $nl . '    <result>';
                 foreach ($vars as $var) {
                     if (isset($row[$var])) {
-                        $r .= $nl.'      <binding name="'.$var.'">';
-                        if ('uri' == $row[$var.' type']) {
-                            $r .= $nl.'        <uri>'.htmlspecialchars($row[$var]).'</uri>';
-                        } elseif ('bnode' == $row[$var.' type']) {
-                            $r .= $nl.'        <bnode>'.substr($row[$var], 2).'</bnode>';
+                        $r .= $nl . '      <binding name="' . $var . '">';
+                        if ('uri' == $row[$var . ' type']) {
+                            $r .= $nl . '        <uri>' . htmlspecialchars($row[$var]) . '</uri>';
+                        } elseif ('bnode' == $row[$var . ' type']) {
+                            $r .= $nl . '        <bnode>' . substr($row[$var], 2) . '</bnode>';
                         } else {
-                            $dt = isset($row[$var.' datatype']) ? ' datatype="'.htmlspecialchars($row[$var.' datatype']).'"' : '';
-                            $lang = isset($row[$var.' lang']) ? ' xml:lang="'.htmlspecialchars($row[$var.' lang']).'"' : '';
-                            $r .= $nl.'        <literal'.$dt.$lang.'>'.htmlspecialchars($row[$var]).'</literal>';
+                            $dt = isset($row[$var . ' datatype']) ? ' datatype="' . htmlspecialchars($row[$var . ' datatype']) . '"' : '';
+                            $lang = isset($row[$var . ' lang']) ? ' xml:lang="' . htmlspecialchars($row[$var . ' lang']) . '"' : '';
+                            $r .= $nl . '        <literal' . $dt . $lang . '>' . htmlspecialchars($row[$var]) . '</literal>';
                         }
-                        $r .= $nl.'      </binding>';
+                        $r .= $nl . '      </binding>';
                     }
                 }
-                $r .= $nl.'    </result>';
+                $r .= $nl . '    </result>';
             }
         }
-        $r .= $nl.'  </results>';
+        $r .= $nl . '  </results>';
         /* /doc */
-        $r .= $nl.'</sparql>';
+        $r .= $nl . '</sparql>';
 
         return $r;
     }
 
     public function getSPARQLJSONSelectResultDoc($r)
     {
-        $this->setHeader('content-type', 'Content-Type: application/sparql-results+json');
+        // error_log('$this->javascript');
+        // error_log(print_r( $this->javascript, true ));
+
+        if ($this->javascript) {
+            $this->setHeader('content-type', 'Content-Type: application/javascript');
+            $this->setHeader('access-control-allow-origin', 'Access-Control-Allow-Origin: *');
+            // X-Content-Type-Options
+        } else {
+            $this->setHeader('content-type', 'Content-Type: application/sparql-results+json');
+        }
         $vars = $r['result']['variables'];
         $rows = $r['result']['rows'];
         $dur = $r['query_time'];
@@ -405,55 +451,55 @@ class ARC2_StoreEndpoint extends ARC2_Store
         /* doc */
         $r = '{';
         /* head */
-        $r .= $nl.'  "head": {';
-        $r .= $nl.'    "vars": [';
+        $r .= $nl . '  "head": {';
+        $r .= $nl . '    "vars": [';
         $first_var = 1;
         foreach ($vars as $var) {
-            $r .= $first_var ? $nl : ','.$nl;
-            $r .= '      "'.$var.'"';
+            $r .= $first_var ? $nl : ',' . $nl;
+            $r .= '      "' . $var . '"';
             $first_var = 0;
         }
-        $r .= $nl.'    ]';
-        $r .= $nl.'  },';
+        $r .= $nl . '    ]';
+        $r .= $nl . '  },';
         /* results */
-        $r .= $nl.'  "results": {';
-        $r .= $nl.'    "bindings": [';
+        $r .= $nl . '  "results": {';
+        $r .= $nl . '    "bindings": [';
         $first_row = 1;
         foreach ($rows as $row) {
-            $r .= $first_row ? $nl : ','.$nl;
+            $r .= $first_row ? $nl : ',' . $nl;
             $r .= '      {';
             $first_var = 1;
             foreach ($vars as $var) {
                 if (isset($row[$var])) {
-                    $r .= $first_var ? $nl : ','.$nl.$nl;
-                    $r .= '        "'.$var.'": {';
-                    if ('uri' == $row[$var.' type']) {
-                        $r .= $nl.'          "type": "uri",';
-                        $r .= $nl.'          "value": "'.$this->a['db_object']->escape($row[$var]).'"';
-                    } elseif ('bnode' == $row[$var.' type']) {
-                        $r .= $nl.'          "type": "bnode",';
-                        $r .= $nl.'          "value": "'.substr($row[$var], 2).'"';
+                    $r .= $first_var ? $nl : ',' . $nl . $nl;
+                    $r .= '        "' . $var . '": {';
+                    if ('uri' == $row[$var . ' type']) {
+                        $r .= $nl . '          "type": "uri",';
+                        $r .= $nl . '          "value": "' . $this->a['db_object']->escape($row[$var]) . '"';
+                    } elseif ('bnode' == $row[$var . ' type']) {
+                        $r .= $nl . '          "type": "bnode",';
+                        $r .= $nl . '          "value": "' . substr($row[$var], 2) . '"';
                     } else {
-                        $dt = isset($row[$var.' datatype']) ? ','.$nl.'          "datatype": "'.$this->a['db_object']->escape($row[$var.' datatype']).'"' : '';
-                        $lang = isset($row[$var.' lang']) ? ','.$nl.'          "xml:lang": "'.$this->a['db_object']->escape($row[$var.' lang']).'"' : '';
+                        $dt = isset($row[$var . ' datatype']) ? ',' . $nl . '          "datatype": "' . $this->a['db_object']->escape($row[$var . ' datatype']) . '"' : '';
+                        $lang = isset($row[$var . ' lang']) ? ',' . $nl . '          "xml:lang": "' . $this->a['db_object']->escape($row[$var . ' lang']) . '"' : '';
                         $type = $dt ? 'typed-literal' : 'literal';
-                        $r .= $nl.'          "type": "'.$type.'",';
-                        $r .= $nl.'          "value": "'.$this->jsonEscape($row[$var]).'"';
-                        $r .= $dt.$lang;
+                        $r .= $nl . '          "type": "' . $type . '",';
+                        $r .= $nl . '          "value": "' . $this->jsonEscape($row[$var]) . '"';
+                        $r .= $dt . $lang;
                     }
-                    $r .= $nl.'        }';
+                    $r .= $nl . '        }';
                     $first_var = 0;
                 }
             }
-            $r .= $nl.'      }';
+            $r .= $nl . '      }';
             $first_row = 0;
         }
-        $r .= $nl.'    ]';
-        $r .= $nl.'  }';
+        $r .= $nl . '    ]';
+        $r .= $nl . '  }';
         /* /doc */
-        $r .= $nl.'}';
+        $r .= $nl . '}';
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -480,15 +526,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $rows = $r['result']['rows'];
         $dur = $r['query_time'];
         if ($this->p('show_inline')) {
-            return '<table>'.$this->getHTMLTableRows($rows, $vars).'</table>';
+            return '<table>' . $this->getHTMLTableRows($rows, $vars) . '</table>';
         }
 
         return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html @@@@ getHTMLTableSelectResultDoc xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-      '.$this->getHTMLDocHead().'
+      ' . $this->getHTMLDocHead() . '
       <body>
         <table>
-          '.$this->getHTMLTableRows($rows, $vars).'
+          ' . $this->getHTMLTableRows($rows, $vars) . '
         </table>
       </body>
       </html>
@@ -502,11 +548,11 @@ class ARC2_StoreEndpoint extends ARC2_Store
             $hr = '';
             $rr = '';
             foreach ($vars as $var) {
-                $hr .= $r ? '' : '<th>'.htmlspecialchars($var).'</th>';
-                $rr .= '<td>'.htmlspecialchars($row[$var]).'</td>';
+                $hr .= $r ? '' : '<th>' . htmlspecialchars($var) . '</th>';
+                $rr .= '<td>' . htmlspecialchars($row[$var]) . '</td>';
             }
-            $r .= $hr ? '<tr>'.$hr.'</tr>' : '';
-            $r .= '<tr>'.$rr.'</tr>';
+            $r .= $hr ? '<tr>' . $hr . '</tr>' : '';
+            $r .= '<tr>' . $rr . '</tr>';
         }
 
         return $r ? $r : '<em>No results found</em>';
@@ -531,11 +577,11 @@ class ARC2_StoreEndpoint extends ARC2_Store
             $hr = '';
             $rr = '';
             foreach ($vars as $var) {
-                $hr .= $r ? '' : ($hr ? $delim.$var : $var);
+                $hr .= $r ? '' : ($hr ? $delim . $var : $var);
                 $val = isset($row[$var]) ? str_replace($delim, $esc_delim, $row[$var]) : '';
-                $rr .= $rr ? $delim.$val : $val;
+                $rr .= $rr ? $delim . $val : $val;
             }
-            $r .= $hr."\n".$rr;
+            $r .= $hr . "\n" . $rr;
         }
 
         return $r ? $r : 'No results found';
@@ -554,7 +600,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'infos' => 'Plain',
         ];
         if ($f = $this->getResultFormat($formats, 'xml')) {
-            $m = 'get'.$f.'AskResultDoc';
+            $m = 'get' . $f . 'AskResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -569,15 +615,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $nl = "\n";
 
-        return ''.
-      '<?xml version="1.0"?>'.
-      $nl.'<sparql xmlns="http://www.w3.org/2005/sparql-results#">'.
-      $nl.'  <head>'.
-      $nl.'    <!-- query time: '.round($dur, 4).' sec -->'.
-      $nl.'  </head>'.
-      $nl.'  <boolean>'.$r_val.'</boolean>'.
-      $nl.'</sparql>'.
-    '';
+        return '' .
+            '<?xml version="1.0"?>' .
+            $nl . '<sparql xmlns="http://www.w3.org/2005/sparql-results#">' .
+            $nl . '  <head>' .
+            $nl . '    <!-- query time: ' . round($dur, 4) . ' sec -->' .
+            $nl . '  </head>' .
+            $nl . '  <boolean>' . $r_val . '</boolean>' .
+            $nl . '</sparql>' .
+            '';
     }
 
     public function getSPARQLJSONAskResultDoc($r)
@@ -586,15 +632,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $r_val = $r['result'] ? 'true' : 'false';
         $dur = $r['query_time'];
         $nl = "\n";
-        $r = ''.
-      $nl.'{'.
-      $nl.'  "head": {'.
-      $nl.'  },'.
-      $nl.'  "boolean" : '.$r_val.
-      $nl.'}'.
-    '';
+        $r = '' .
+            $nl . '{' .
+            $nl . '  "head": {' .
+            $nl . '  },' .
+            $nl . '  "boolean" : ' . $r_val .
+            $nl . '}' .
+            '';
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -627,7 +673,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'infos' => 'Plain',
         ];
         if ($f = $this->getResultFormat($formats, 'rdfxml')) {
-            $m = 'get'.$f.'ConstructResultDoc';
+            $m = 'get' . $f . 'ConstructResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -642,7 +688,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $ser = ARC2::getRDFXMLSerializer($this->a);
         $dur = $r['query_time'];
 
-        return $ser->getSerializedIndex($index)."\n".'<!-- query time: '.$dur.' -->';
+        return $ser->getSerializedIndex($index) . "\n" . '<!-- query time: ' . $dur . ' -->';
     }
 
     public function getTurtleConstructResultDoc($r)
@@ -652,7 +698,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $ser = ARC2::getTurtleSerializer($this->a);
         $dur = $r['query_time'];
 
-        return '# query time: '.$dur."\n".$ser->getSerializedIndex($index);
+        return '# query time: ' . $dur . "\n" . $ser->getSerializedIndex($index);
     }
 
     public function getRDFJSONConstructResultDoc($r)
@@ -663,7 +709,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $r = $ser->getSerializedIndex($index);
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -696,7 +742,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'infos' => 'Plain',
         ];
         if ($f = $this->getResultFormat($formats, 'rdfxml')) {
-            $m = 'get'.$f.'DescribeResultDoc';
+            $m = 'get' . $f . 'DescribeResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -711,7 +757,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $ser = ARC2::getRDFXMLSerializer($this->a);
         $dur = $r['query_time'];
 
-        return $ser->getSerializedIndex($index)."\n".'<!-- query time: '.$dur.' -->';
+        return $ser->getSerializedIndex($index) . "\n" . '<!-- query time: ' . $dur . ' -->';
     }
 
     public function getTurtleDescribeResultDoc($r)
@@ -721,7 +767,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $ser = ARC2::getTurtleSerializer($this->a);
         $dur = $r['query_time'];
 
-        return '# query time: '.$dur."\n".$ser->getSerializedIndex($index);
+        return '# query time: ' . $dur . "\n" . $ser->getSerializedIndex($index);
     }
 
     public function getRDFJSONDescribeResultDoc($r)
@@ -732,7 +778,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $r = $ser->getSerializedIndex($index);
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -774,7 +820,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'infos' => 'Plain',
         ];
         if ($f = $this->getResultFormat($formats, 'xml')) {
-            $m = 'get'.$f.'LoadResultDoc';
+            $m = 'get' . $f . 'LoadResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -789,15 +835,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $nl = "\n";
 
-        return ''.
-      '<?xml version="1.0"?>'.
-      $nl.'<sparql xmlns="http://www.w3.org/2005/sparql-results#">'.
-      $nl.'  <head>'.
-      $nl.'    <!-- query time: '.round($dur, 4).' sec -->'.
-      $nl.'  </head>'.
-      $nl.'  <inserted>'.$r_val.'</inserted>'.
-      $nl.'</sparql>'.
-    '';
+        return '' .
+            '<?xml version="1.0"?>' .
+            $nl . '<sparql xmlns="http://www.w3.org/2005/sparql-results#">' .
+            $nl . '  <head>' .
+            $nl . '    <!-- query time: ' . round($dur, 4) . ' sec -->' .
+            $nl . '  </head>' .
+            $nl . '  <inserted>' . $r_val . '</inserted>' .
+            $nl . '</sparql>' .
+            '';
     }
 
     public function getSPARQLJSONLoadResultDoc($r)
@@ -806,15 +852,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $r_val = $r['result']['t_count'];
         $dur = $r['query_time'];
         $nl = "\n";
-        $r = ''.
-      $nl.'{'.
-      $nl.'  "head": {'.
-      $nl.'  },'.
-      $nl.'  "inserted" : '.$r_val.
-      $nl.'}'.
-    '';
+        $r = '' .
+            $nl . '{' .
+            $nl . '  "head": {' .
+            $nl . '  },' .
+            $nl . '  "inserted" : ' . $r_val .
+            $nl . '}' .
+            '';
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -845,7 +891,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'php_ser' => 'PHPSER',
         ];
         if ($f = $this->getResultFormat($formats, 'xml')) {
-            $m = 'get'.$f.'DeleteResultDoc';
+            $m = 'get' . $f . 'DeleteResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -860,15 +906,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $nl = "\n";
 
-        return ''.
-      '<?xml version="1.0"?>'.
-      $nl.'<sparql xmlns="http://www.w3.org/2005/sparql-results#">'.
-      $nl.'  <head>'.
-      $nl.'    <!-- query time: '.round($dur, 4).' sec -->'.
-      $nl.'  </head>'.
-      $nl.'  <deleted>'.$r_val.'</deleted>'.
-      $nl.'</sparql>'.
-    '';
+        return '' .
+            '<?xml version="1.0"?>' .
+            $nl . '<sparql xmlns="http://www.w3.org/2005/sparql-results#">' .
+            $nl . '  <head>' .
+            $nl . '    <!-- query time: ' . round($dur, 4) . ' sec -->' .
+            $nl . '  </head>' .
+            $nl . '  <deleted>' . $r_val . '</deleted>' .
+            $nl . '</sparql>' .
+            '';
     }
 
     public function getSPARQLJSONDeleteResultDoc($r)
@@ -877,15 +923,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $r_val = $r['result']['t_count'];
         $dur = $r['query_time'];
         $nl = "\n";
-        $r = ''.
-      $nl.'{'.
-      $nl.'  "head": {'.
-      $nl.'  },'.
-      $nl.'  "deleted" : '.$r_val.
-      $nl.'}'.
-    '';
+        $r = '' .
+            $nl . '{' .
+            $nl . '  "head": {' .
+            $nl . '  },' .
+            $nl . '  "deleted" : ' . $r_val .
+            $nl . '}' .
+            '';
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -916,7 +962,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
             'php_ser' => 'PHPSER',
         ];
         if ($f = $this->getResultFormat($formats, 'xml')) {
-            $m = 'get'.$f.'InsertResultDoc';
+            $m = 'get' . $f . 'InsertResultDoc';
 
             return method_exists($this, $m) ? $this->$m($r) : 'not implemented';
         }
@@ -931,15 +977,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $dur = $r['query_time'];
         $nl = "\n";
 
-        return ''.
-      '<?xml version="1.0"?>'.
-      $nl.'<sparql xmlns="http://www.w3.org/2005/sparql-results#">'.
-      $nl.'  <head>'.
-      $nl.'    <!-- query time: '.round($dur, 4).' sec -->'.
-      $nl.'  </head>'.
-      $nl.'  <inserted>'.$r_val.'</inserted>'.
-      $nl.'</sparql>'.
-    '';
+        return '' .
+            '<?xml version="1.0"?>' .
+            $nl . '<sparql xmlns="http://www.w3.org/2005/sparql-results#">' .
+            $nl . '  <head>' .
+            $nl . '    <!-- query time: ' . round($dur, 4) . ' sec -->' .
+            $nl . '  </head>' .
+            $nl . '  <inserted>' . $r_val . '</inserted>' .
+            $nl . '</sparql>' .
+            '';
     }
 
     public function getSPARQLJSONInsertResultDoc($r)
@@ -948,15 +994,15 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $r_val = $r['result']['t_count'];
         $dur = $r['query_time'];
         $nl = "\n";
-        $r = ''.
-      $nl.'{'.
-      $nl.'  "head": {'.
-      $nl.'  },'.
-      $nl.'  "inserted" : '.$r_val.
-      $nl.'}'.
-    '';
+        $r = '' .
+            $nl . '{' .
+            $nl . '  "head": {' .
+            $nl . '  },' .
+            $nl . '  "inserted" : ' . $r_val .
+            $nl . '}' .
+            '';
         if (($v = $this->p('jsonp')) || ($v = $this->p('callback'))) {
-            $r = $v.'('.$r.')';
+            $r = $v . '(' . $r . ')';
         }
 
         return $r;
@@ -991,8 +1037,8 @@ class ARC2_StoreEndpoint extends ARC2_Store
     {
         return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <getHTMLFormDoc @@@@ html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-      '.$this->getHTMLDocHead().'
-      '.$this->getHTMLDocBody().'
+      ' . $this->getHTMLDocHead() . '
+      ' . $this->getHTMLDocBody() . '
       </html>
     ';
     }
@@ -1001,9 +1047,9 @@ class ARC2_StoreEndpoint extends ARC2_Store
     {
         return '
     	<head>
-    		<title>'.$this->getHTMLDocTitle().'</title>
+    		<title>' . $this->getHTMLDocTitle() . '</title>
     		<style type="text/css">
-        '.$this->getHTMLDocCSS().'
+        ' . $this->getHTMLDocCSS() . '
     		</style>
     	</head>
     ';
@@ -1016,7 +1062,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
 
     public function getHTMLDocHeading()
     {
-        return $this->v('endpoint_heading', 'ARC SPARQL+ Endpoint (v'.ARC2::getVersion().')', $this->a);
+        return $this->v('endpoint_heading', 'ARC SPARQL+ Endpoint (v' . ARC2::getVersion() . ')', $this->a);
     }
 
     public function getHTMLDocCSS()
@@ -1088,7 +1134,7 @@ class ARC2_StoreEndpoint extends ARC2_Store
     {
         return '
     	<body>
-        <h1>'.$this->getHTMLDocHeading().'</h1>
+        <h1>' . $this->getHTMLDocHeading() . '</h1>
         <div class="intro">
           <p>
             <a href="?">This interface</a> implements
@@ -1096,14 +1142,14 @@ class ARC2_StoreEndpoint extends ARC2_Store
             <a href="https://github.com/semsol/arc2/wiki/SPARQL%2B">SPARQL+</a> via <a href="http://www.w3.org/TR/rdf-sparql-protocol/#query-bindings-http">HTTP Bindings</a>.
           </p>
           <p>
-            Enabled operations: '.implode(', ', $this->getFeatures()).'
+            Enabled operations: ' . implode(', ', $this->getFeatures()) . '
           </p>
           <p>
-            Max. number of results : '.$this->v('endpoint_max_limit', '<em>unrestricted</em>', $this->a).'
+            Max. number of results : ' . $this->v('endpoint_max_limit', '<em>unrestricted</em>', $this->a) . '
           </p>
         </div>
-        '.$this->getHTMLDocForm().'
-        '.($this->p('show_inline') ? $this->query_result : '').'
+        ' . $this->getHTMLDocForm() . '
+        ' . ($this->p('show_inline') ? $this->query_result : '') . '
     	</body>
     ';
     }
@@ -1113,9 +1159,9 @@ class ARC2_StoreEndpoint extends ARC2_Store
         $q = $this->p('query') ? htmlspecialchars($this->p('query')) : "SELECT * WHERE {\n  GRAPH ?g { ?s ?p ?o . }\n}\nLIMIT 10";
 
         return '
-      <form id="sparql-form" action="?" enctype="application/x-www-form-urlencoded" method="'.('GET' == $_SERVER['REQUEST_METHOD'] ? 'get' : 'post').'">
-        <textarea id="query" name="query" rows="20" cols="80">'.$q.'</textarea>
-        '.$this->getHTMLDocOptions().'
+      <form id="sparql-form" action="?" enctype="application/x-www-form-urlencoded" method="' . ('GET' == $_SERVER['REQUEST_METHOD'] ? 'get' : 'post') . '">
+        <textarea id="query" name="query" rows="20" cols="80">' . $q . '</textarea>
+        ' . $this->getHTMLDocOptions() . '
         <div class="form-buttons">
           <input type="submit" value="Send Query" />
           <input type="reset" value="Reset" />
@@ -1136,33 +1182,33 @@ class ARC2_StoreEndpoint extends ARC2_Store
           <dt class="first">Output format (if supported by query type):</dt>
           <dd>
             <select id="output" name="output">
-              <option value="" '.(!$sel ? $sel_code : '').'>default</option>
-              <option value="xml" '.('xml' == $sel ? $sel_code : '').'>XML</option>
-              <option value="json" '.('json' == $sel ? $sel_code : '').'>JSON</option>
-              <option value="plain" '.('plain' == $sel ? $sel_code : '').'>Plain</option>
-              <option value="php_ser" '.('php_ser' == $sel ? $sel_code : '').'>Serialized PHP</option>
-              <option value="turtle" '.('turtle' == $sel ? $sel_code : '').'>Turtle</option>
-              <option value="rdfxml" '.('rdfxml' == $sel ? $sel_code : '').'>RDF/XML</option>
-              <option value="infos" '.('infos' == $sel ? $sel_code : '').'>Query Structure</option>
-              '.($this->allow_sql ? '<option value="sql" '.('sql' == $sel ? $sel_code : '').'>SQL</option>' : '').'
-              <option value="htmltab" '.('htmltab' == $sel ? $sel_code : '').'>HTML Table</option>
-              <option value="tsv" '.('tsv' == $sel ? $sel_code : '').'>TSV</option>
+              <option value="" ' . (!$sel ? $sel_code : '') . '>default</option>
+              <option value="xml" ' . ('xml' == $sel ? $sel_code : '') . '>XML</option>
+              <option value="json" ' . ('json' == $sel ? $sel_code : '') . '>JSON</option>
+              <option value="plain" ' . ('plain' == $sel ? $sel_code : '') . '>Plain</option>
+              <option value="php_ser" ' . ('php_ser' == $sel ? $sel_code : '') . '>Serialized PHP</option>
+              <option value="turtle" ' . ('turtle' == $sel ? $sel_code : '') . '>Turtle</option>
+              <option value="rdfxml" ' . ('rdfxml' == $sel ? $sel_code : '') . '>RDF/XML</option>
+              <option value="infos" ' . ('infos' == $sel ? $sel_code : '') . '>Query Structure</option>
+              ' . ($this->allow_sql ? '<option value="sql" ' . ('sql' == $sel ? $sel_code : '') . '>SQL</option>' : '') . '
+              <option value="htmltab" ' . ('htmltab' == $sel ? $sel_code : '') . '>HTML Table</option>
+              <option value="tsv" ' . ('tsv' == $sel ? $sel_code : '') . '>TSV</option>
             </select>
           </dd>
 
           <dt>jsonp/callback (for JSON results)</dt>
           <dd>
-            <input type="text" id="jsonp" name="jsonp" value="'.htmlspecialchars($this->p('jsonp')).'" />
+            <input type="text" id="jsonp" name="jsonp" value="' . htmlspecialchars($this->p('jsonp')) . '" />
           </dd>
 
           <dt>API key (if required)</dt>
           <dd>
-            <input type="text" id="key" name="key" value="'.htmlspecialchars($this->p('key')).'" />
+            <input type="text" id="key" name="key" value="' . htmlspecialchars($this->p('key')) . '" />
           </dd>
 
           <dt>Show results inline: </dt>
           <dd>
-            <input type="checkbox" name="show_inline" value="1" '.($this->p('show_inline') ? ' checked="checked"' : '').' />
+            <input type="checkbox" name="show_inline" value="1" ' . ($this->p('show_inline') ? ' checked="checked"' : '') . ' />
           </dd>
 
         </dl>
