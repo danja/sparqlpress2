@@ -25,31 +25,12 @@ error_log(json_encode($movefile));
  error_log(print_r( $movefile, true ));
 
 ----
-### Key Files/Dirs (as of 2021-04-06**)
-               
-* /sparqlpress-legacy : old SparqlPress (with many tweaks)  
-* /sparqlpress2 : new SparqlPress 
+  
+**2021-06-23**
 
-* install.md   
-
-* zip.sh : script to zip (package) the plugin
-* sparqlpress.zip : zipped plugin
-* sparqlpress-previous.zip : the version before current
-
-* devlog.md : this file
-* AUTHORS     
-* LICENSE                     
-* README.md            
-* sparqlpress.code-workspace : VS Code config (should be in .gitignore)       
+LodLive does look feasible (with some fiddling) so have moved inside /sparqlpress dir.
 
 
-Not sure how I'll need to bundle ARC2 with the plugin, need to find out about using composer with WP. ARC2 composer install, following:
-```composer require semsol/arc2:^2```
-puts a bunch of stuff under 
-```arc2-play/vendor/```
-
-so for now at least including all that in the zip
-----
 
 **2021-06-16**
 
@@ -381,7 +362,32 @@ https://wordpress.org/plugins/debug-bar/
 
 https://wordpress.org/plugins/debug-bar-actions-and-filters-addon/
 
+----
 
+Not sure how I'll need to bundle ARC2 with the plugin, need to find out about using composer with WP. ARC2 composer install, following:
+```composer require semsol/arc2:^2```
+puts a bunch of stuff under 
+```arc2-play/vendor/```
+
+so for now at least including all that in the zip
+----
+
+### Key Files/Dirs (as of 2021-04-06**)
+               
+* /sparqlpress-legacy : old SparqlPress (with many tweaks)  
+* /sparqlpress2 : new SparqlPress 
+
+* install.md   
+
+* zip.sh : script to zip (package) the plugin
+* sparqlpress.zip : zipped plugin
+* sparqlpress-previous.zip : the version before current
+
+* devlog.md : this file
+* AUTHORS     
+* LICENSE                     
+* README.md            
+* sparqlpress.code-workspace : VS Code config (should be in .gitignore)     
 
 **2021-04-06**
 
