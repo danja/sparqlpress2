@@ -13,40 +13,19 @@ class ARC2_Adapter extends WP_REST_Controller
 
     // var $namespace = 'sparqlpress/v1';
 
-    private $config;
+    private $base_store_config;
 
 
     public function __construct()
     {
         global $wpdb;
 
-        $this->config = array(
-            /*
+        $this->base_store_config = array(
             'db_host' => $_SERVER['SERVER_NAME'],
             'db_name' => $wpdb->dbname,
             'db_user' => $wpdb->dbuser,
             'db_pwd' => $wpdb->dbpassword,
-            'store_name' => 'sparqlpress',
-
-             'db_host' => 'localhost',
-            'db_name' => 'arc_',
-            'db_user' => 'danny',
-            'db_pwd' => 'maria',
-            'store_name' => 'arc_tests',
-
-             'db_host' => 'localhost',
-            'db_name' => 'bitnami_wordpress',
-            'db_user' => 'bn_wordpress',
-            'db_pwd' => '915cfedeac',
-            'store_name' => 'arc_tests',
-    */
-
-            'db_host' => $_SERVER['SERVER_NAME'],
-            'db_name' => $wpdb->dbname,
-            'db_user' => $wpdb->dbuser,
-            'db_pwd' => $wpdb->dbpassword,
-            'store_name' => 'sparqlpress',
-
+            'store_name' => 'sparqlpress_system',
 
             /* network */
             /* 'proxy_host' => '192.168.1.1',
@@ -80,11 +59,24 @@ class ARC2_Adapter extends WP_REST_Controller
         return self::$instance;
     }
 
-    public function init_store()
+    public function init_store($store_name)
     {
         require dirname(__FILE__) . '/../arc2/vendor/autoload.php';
 
-        $this->store = ARC2::getStore($this->config);
+       
+
+        if (isset($store_name) && trim($store_name) !== '') {
+            $store_config = array_merge(array(), $this->base_store_config); // clone
+
+            $store_config['store_name']= trim($store_name);
+        } else {
+            $store_config = $this->base_store_config;
+        }
+
+        error_log(json_encode($this->base_store_config));
+        error_log(json_encode($store_config));
+        
+        $this->store = ARC2::getStore($store_config);
 
         // since version 2.3+
         $this->store->createDBCon();
@@ -94,11 +86,16 @@ class ARC2_Adapter extends WP_REST_Controller
         }
     }
 
-    public function create_store() // REST call
+    public function create_store($stuff) // REST call
     {
+        $params = $stuff->get_params();
+        // error check needed
+        error_log($params['store_name']);
+
+        $store_name = $params['store_name'];
         error_log('-----');
         error_log('create_store called');
-        $this->init_store();
+        $this->init_store($store_name);
 
         $url = get_site_url() . '/wp-admin/admin.php?page=store-admin';
         wp_redirect($url);
@@ -153,7 +150,7 @@ class ARC2_Adapter extends WP_REST_Controller
 
     public function getEndpoint()
     {
-        return ARC2::getStoreEndpoint($this->config);
+        return ARC2::getStoreEndpoint($this->base_store_config);
     }
 
 
@@ -208,9 +205,10 @@ class ARC2_Adapter extends WP_REST_Controller
     {
         $params = $stuff->get_params();
         // error check needed
-        error_log($params['remote_url']);
+        // error_log($params['remote_url']);
 
         $remote = $params['remote_url'];
+
         // need cURL or similar
         $contents = file_get_contents($remote);
 

@@ -28,12 +28,16 @@ function sparqlpress_scan_test()
 */
 ?>
 
-<!--     <input type="text" name="add_data" value="">     <label for="add_data">label</label> -->
-(ignore this for now - default store is created automatically)
+<h3>Create Store</h3>
 <form action="<?php echo site_url('wp-json/sparqlpress/v1/create_store'); ?>" method="POST">
+
+    <label for="store_name">Store Name</label>
+    <input type="text" id="store_name" name="store_name" multiple="false">
+
     <input type="hidden" name="action" value="create_store">
-    <?php submit_button('Create Store'); ?>
+    <?php submit_button('Create'); ?>
 </form>
+
 <hr>
 
 <h3>Upload Turtle Data</h3>
@@ -44,7 +48,7 @@ function sparqlpress_scan_test()
 
 <h3>Extract Data from Web Page</h3>
 <form action="<?php echo site_url('wp-json/sparqlpress/v1/scan_page'); ?>" method="POST" enctype="multipart/form-data">
-<label for="remote_url">label</label>
+    <label for="remote_url">Target URL : </label>
     <input type="text" id="remote_url" name="remote_url" multiple="false">
     <?php submit_button('Scan URL'); ?>
 </form>

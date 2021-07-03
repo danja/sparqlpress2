@@ -1,13 +1,13 @@
 # SparqlPress2 Development log.
 
 For dev I've installed the XAMPP PHP etc. distro, to run:
+
 ```
 sudo /opt/lampp/lampp start
 
 tail -f /opt/lampp/apps/wordpress/htdocs/wp-content/debug.log
 
 // tail -f /opt/lampp/logs/php_error_log
-
 ```
 
 To rebuild plugin:
@@ -25,7 +25,16 @@ error_log(json_encode($movefile));
  error_log(print_r( $movefile, true ));
 
 ----
-  
+
+**2021-07-03**
+
+Spent quite a while trying to get LodLive going, also using Jekyll for docs. Ended up going round in circles on both. Had a few day's break, so leaving those bits for now and returning to more core things: creating another store (so System + User), triggering data creation on Post.
+
+Ok, so set up so from Store Admin can create a new store, with a given name.
+All the other store params are taken from the same config as the system store - figure out access control later.
+
+
+
 **2021-06-23**
 
 LodLive does look feasible (with some fiddling) so have moved inside /sparqlpress dir.

@@ -240,8 +240,8 @@ function rdf_extensions( $types, $file, $filename, $mimes ) {
 				function () {
 					$page = dirname(__FILE__) . '/store-admin.php';
 					include $page;
-					error_log('include called');
-					error_log($page);
+				//	error_log('include called');
+				//	error_log($page);
 				}
 			);
 		}
